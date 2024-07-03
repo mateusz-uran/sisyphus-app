@@ -1,0 +1,131 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixin.scss";
+
+$head_p: getThemeColor(80, neutral);
+$main_p: getThemeColor(95, neutral);
+
+section {
+  display: flex;
+  justify-content: center;
+
+  .app {
+    margin: 1rem 0;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    background-color: getThemeColor(40, secondary);
+    padding: 15px;
+    border-radius: 5px;
+
+    .h-font-small {
+      font-size: $font-micro;
+    }
+
+    .link-wrapper {
+      text-align: center;
+
+      p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: $head_p;
+      }
+
+      p,
+      a {
+        width: 100px;
+      }
+    }
+
+    .application-date {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      justify-content: space-between;
+
+      p {
+        margin: 0;
+        color: $main_p;
+
+        &:first-child {
+          color: $head_p;
+        }
+      }
+    }
+
+    .status-wrapper {
+      text-align: center;
+
+      p {
+        color: $head_p;
+      }
+    }
+
+    .btns-wrapper {
+      display: flex;
+      align-items: center;
+
+      button {
+        margin: 0 0.5rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 820px) {
+  section {
+    .app {
+      .link-wrapper {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .link-wrapper,
+      .application-date,
+      .status-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .link-wrapper,
+      .application-date {
+        p:last-child,
+        a {
+          margin-bottom: 20px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+
+      .status-wrapper {
+        max-width: 150px;
+      }
+
+      .btns-wrapper {
+        flex-direction: column;
+        justify-content: center;
+
+        button {
+          margin-bottom: 15px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  section {
+    .app {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .btns-wrapper {
+        margin-top: 15px;
+      }
+    }
+  }
+}

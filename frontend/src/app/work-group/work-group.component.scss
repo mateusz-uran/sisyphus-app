@@ -1,0 +1,125 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixin.scss";
+
+section {
+  display: flex;
+  justify-content: center;
+
+  .content-wrapper {
+    background-color: getThemeColor(30, secondary);
+    display: flex;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border-radius: 5px;
+    margin: 20px 0;
+    position: relative;
+
+    &.hired {
+      background-color: getThemeColor(50, secondary);
+    }
+
+    .link-wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 20%;
+
+      img {
+        max-height: 50px;
+      }
+
+      button {
+        margin-top: 1rem;
+      }
+    }
+
+    article {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 1rem;
+      width: 60%;
+
+      p {
+        margin: 0;
+        color: getThemeColor(80, neutral);
+      }
+
+      .group-content {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+        justify-content: space-around;
+
+        p:first-child {
+          font-weight: 600;
+          font-size: $font-small;
+          color: getThemeColor(60, neutral);
+        }
+      }
+    }
+
+    .btn-wrapper {
+      width: 20%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      button,
+      mat-icon {
+        margin: 0 0.5rem;
+      }
+    }
+  }
+
+  .celeb {
+    position: absolute;
+    left: -20px;
+    top: -20px;
+    height: 50px;
+
+    img {
+      height: 50px;
+    }
+  }
+}
+
+@media (max-width: 1040px) {
+  section {
+    .content-wrapper {
+      flex-direction: column;
+      align-items: center;
+
+      .link-wrapper,
+      .btn-wrapper {
+        width: 100%; /* Ensure full width for the wrappers */
+        margin: 20px 0;
+      }
+
+      article {
+        width: 100%; /* Ensure full width for the article */
+        display: flex;
+        white-space: nowrap;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 15px 0;
+
+        .group-content {
+          padding: 0;
+          padding: 15px;
+          width: auto;
+          height: auto;
+        }
+      }
+
+      .btn-wrapper {
+        a {
+          min-width: 100px;
+        }
+      }
+    }
+  }
+}

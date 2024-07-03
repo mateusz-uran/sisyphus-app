@@ -1,0 +1,6 @@
+@use "@angular/material" as mat;
+@use "./m3-theme" as customTheme;
+
+@function getThemeColor($hueValue, $type) {
+  @return mat.get-theme-color(customTheme.$dark-theme, $type, $hueValue);
+}

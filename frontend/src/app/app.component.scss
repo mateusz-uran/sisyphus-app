@@ -1,0 +1,27 @@
+@import "../styles//mixin.scss";
+@import "../styles/variables.scss";
+
+header {
+  background-color: getThemeColor(20, secondary);
+
+  img {
+    max-height: 60px;
+  }
+
+  .h-content {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+
+    p {
+      margin: 0;
+      font-size: $font-medium;
+      font-weight: 800;
+      color: getThemeColor(90, secondary);
+    }
+  }
+}
+
+.upload-wrapper {
+  padding: 1rem;
+}

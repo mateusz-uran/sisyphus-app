@@ -1,0 +1,31 @@
+/* You can add global styles to this file, and also import other style files */
+@use "@angular/material" as mat;
+@use "./m3-theme" as customTheme;
+@import "./mixin.scss";
+@include mat.core();
+
+@import "./reset.scss";
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.wrapper {
+  padding: 0 80px;
+}
+
+.content {
+  max-width: 1200px;
+}
+
+body {
+  @include mat.all-component-themes(customTheme.$dark-theme);
+  background-color: getThemeColor(20, secondary);
+}
+
+@include mat.color-variants-backwards-compatibility(customTheme.$dark-theme);
