@@ -2,3 +2,6 @@
 /backend/target/
 /backend/.idea/
 /frontend/.angular/
+/backend/.dockerignore
+/.env
+/frontend/dist/

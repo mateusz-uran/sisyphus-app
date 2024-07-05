@@ -1,0 +1,4 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://mateuszuran:password@mongo_db:27017/sisyphus-db?authSource=admin
