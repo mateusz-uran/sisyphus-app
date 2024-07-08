@@ -1,0 +1,9 @@
+stages:
+  - test
+
+echo-test:
+  stage: test
+  script:
+    - echo "Pipeline is working"
+  only:
+    - deploy
