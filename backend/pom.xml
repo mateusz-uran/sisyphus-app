@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>io.github.mateuszuran</groupId>
 	<artifactId>sisyphus-app</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<name>sisyphus-app</name>
 	<description>Application to store sisyphus work (lol)</description>
 	<properties>
