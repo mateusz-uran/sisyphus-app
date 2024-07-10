@@ -1,30 +1,26 @@
+image: docker:latest
+services:
+  - docker:dind
+
+variables:
+  DOCKER_DRIVER: overlay
+  PROFILE: ci/cd
+
 stages:
-  - test
-  - build
-  - deploy
+  - compile
 
 # Extract the app version from the pom.xml file
 before_script:
-  - export APP_VERSION=$(grep -m1 "<version>" backend/pom.xml | sed -e 's/<[^>]*>//g' | xargs)
+  - export APP_VERSION=$(./mvnw help:evaluate -Dexpression="project.version" -q -DforceStdout)
 
-# Run integration tests using TestContainers
-test-integration:
-  stage: test
+compile:
+  stage: compile
   script:
     - cd backend
-    - mvn clean verify  # Run integration tests using Maven
-  services:
-    - docker:dind  # Use Docker-in-Docker service for running tests that require Docker
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
-
-# Build Docker image
-build-api:
-  stage: build
-  script:
-    - cd backend
-    - docker build --build-arg APP_VERSION=$APP_VERSION -t sisyphus/sisyphus:$APP_VERSION .
-  dependencies:
-    - test-integration  # Ensure build-api runs after test-integration
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
+    - ./mvnw clean compile  # Run integration tests using Maven
+  only:
+    changes:
+      - backend/**
+      - docker-compose.yml
+    refs:
+      - ci/cd

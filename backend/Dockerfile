@@ -16,7 +16,7 @@ COPY --from=build /build/target/sisyphus-app-*.jar /app/
 
 EXPOSE 8080
 
-ENV DB_URL mongodb://mateuszuran:password@mongo_db:27017/sisyphus-db?authSource=admin
+ENV DB_URL mongodb://johndoe:password@mongo_db:27017/sisyphus-db?authSource=admin
 ENV ACTIVE_PROFILE=${PROFILE}
 ENV JAR_VERSION=${APP_VERSION}
 

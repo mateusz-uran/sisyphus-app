@@ -5,7 +5,7 @@ services:
     image: mongo:jammy
     restart: unless-stopped
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=mateuszuran
+      - MONGO_INITDB_ROOT_USERNAME=johndoe
       - MONGO_INITDB_ROOT_PASSWORD=password
     ports:
       - "27017:27017"

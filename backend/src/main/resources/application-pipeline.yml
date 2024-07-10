@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://johndoe:password@mongo_db:27017/sisyphus-db?authSource=admin
+application:
+  cors:
+    origins: http://localhost:9090
