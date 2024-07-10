@@ -1,0 +1,31 @@
+name: Sisyphus backend API pipeline
+
+on:
+  push:
+    branches:
+      - ci/cd
+    paths:
+      - backend/**
+      - 'docker.compose.yml'
+      - .github/workflows/*-backend.yml
+
+jobs:
+  compile:
+    runs-on: ubuntu:latest
+    name: Compile project
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Unit tests
+        run: |
+          cd backend
+          ./mvnw clean compile
