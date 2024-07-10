@@ -9,7 +9,6 @@ variables:
 stages:
   - compile
 
-# Extract the app version from the pom.xml file
 before_script:
   - export APP_VERSION=$(./mvnw help:evaluate -Dexpression="project.version" -q -DforceStdout)
 
