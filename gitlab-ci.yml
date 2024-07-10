@@ -17,7 +17,7 @@ compile:
   stage: compile
   script:
     - cd backend
-    - ./mvnw clean compile  # Run integration tests using Maven
+    - ./mvnw clean compile
   only:
     changes:
       - backend/**
