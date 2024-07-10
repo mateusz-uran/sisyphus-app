@@ -28,4 +28,5 @@ jobs:
       - name: Unit tests
         run: |
           cd backend
+          chmod +x mvnw
           ./mvnw clean compile
