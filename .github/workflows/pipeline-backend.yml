@@ -77,6 +77,7 @@ jobs:
 
   build-image:
     runs-on: ubuntu-latest
+    name: Build docker image
     needs: [build-backend]
     steps:
       - name: Setup JDK
@@ -98,7 +99,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push to dockerhub
-        uses: docker/build-push-actions/@v5
+        uses: docker/build-push-action/@v5
         with:
           context: backend
           file: backend/Dockerfile
