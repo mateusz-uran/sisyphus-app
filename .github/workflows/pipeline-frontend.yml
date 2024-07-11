@@ -48,4 +48,4 @@ jobs:
           file: frontend/Dockerfile
           push: true
           platforms: linux/amd64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/sisyphus-ui:${{ steps.extract_version.outputs.VERSION }},${{ secrets.DOCKERHUB_USERNAME }}/sisyphus-ui:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/sisyphus-ui:${{ env.VERSION }},${{ secrets.DOCKERHUB_USERNAME }}/sisyphus-ui:latest
