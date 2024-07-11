@@ -113,6 +113,6 @@ jobs:
           platforms: linux/amd64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/sisyphus-api:${{ steps.extract_version.outputs.VERSION }},${{ secrets.DOCKERHUB_USERNAME }}/sisyphus-api:latest
           build-args: |
-            PROFILE=dev
+            PROFILE=pipeline
             APP_VERSION=${{ steps.extract_version.outputs.VERSION }}
 
