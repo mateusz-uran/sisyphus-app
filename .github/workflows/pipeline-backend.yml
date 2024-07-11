@@ -95,6 +95,7 @@ jobs:
         id: extract_version
         run: |
           cd backend
+          chmod +x mvnw
           echo "VERSION=$(./mvnw help:evaluate -Dexpression='project.version' -q -DforceStdout)" >> $GITHUB_OUTPUT
 
       - name: Login to Dockerhub
