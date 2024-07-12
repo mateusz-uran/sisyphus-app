@@ -5,3 +5,9 @@ spring:
 application:
   cors:
     origins: http://localhost:9090
+
+server:
+  port: 8080
+
+  servlet:
+    context-path: /api/v1/
