@@ -13,7 +13,7 @@ import { TransformedWorkGroup, WorkGroup } from '../interfaces/work-group';
   providedIn: 'root',
 })
 export class WorkGroupService {
-  private apiUrl = 'http://localhost:8080/group';
+  private apiUrl = 'http://localhost:8088/group';
 
   private workGroupsSubject = new BehaviorSubject<TransformedWorkGroup[]>([]);
   workGroups$ = this.workGroupsSubject.asObservable();

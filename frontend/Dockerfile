@@ -1,5 +1,7 @@
 FROM node:18 AS build-stage
 
+RUN npm install -g @angular/cli
+
 WORKDIR /app
 
 COPY package*.json ./
@@ -8,8 +10,8 @@ RUN npm install
 
 COPY . .
 
-## ng build --configuration production
-RUN npm run build --prod
+# RUN npm run build --prod
+RUN ng build --configuration production
 
 FROM nginx:alpine
 

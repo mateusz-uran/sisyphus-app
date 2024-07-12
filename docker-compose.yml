@@ -13,14 +13,14 @@ services:
       - db:/data/db
   sisyphus-api:
     container_name: sisyphus-api
-    image: sisyphus/sisyphus:1.0.1
+    image: sisyphus/sisyphus:1.0.3
     ports:
       - '8080:8080'
     depends_on:
       - mongo_db
   sisyphus-frontend:
     container_name: sisyphus-frontend
-    image: sisyphus/sisyphus-frontend:1.0.0
+    image: sisyphus/sisyphus-frontend:1.0.2
     ports:
       - '9090:80'
     depends_on:
