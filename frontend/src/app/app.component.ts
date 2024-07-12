@@ -5,7 +5,6 @@ import { WorkGroupComponent } from './work-group/work-group.component';
 import { UploadFileComponent } from './upload-file/upload-file.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
-import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -42,8 +41,5 @@ export class AppComponent {
         this.showUploadFileForm = this.router.url === '/';
       }
     });
-
-    console.log(environment);
-    console.log(environment.apiUrl);
   }
 }

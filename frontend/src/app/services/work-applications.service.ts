@@ -5,12 +5,13 @@ import {
   WorkApplicationDTO,
 } from '../interfaces/work-application';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WorkApplicationsService {
-  private apiUrl = 'http://localhost:8088/applications';
+  private apiUrl = environment.apiUrl + '/applications';
 
   constructor(private http: HttpClient) {}
 
