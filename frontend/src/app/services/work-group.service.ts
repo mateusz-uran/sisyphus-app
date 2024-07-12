@@ -8,12 +8,13 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 import { TransformedWorkGroup, WorkGroup } from '../interfaces/work-group';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WorkGroupService {
-  private apiUrl = 'http://localhost:8088/group';
+  private apiUrl = environment.apiUrl + '/group';
 
   private workGroupsSubject = new BehaviorSubject<TransformedWorkGroup[]>([]);
   workGroups$ = this.workGroupsSubject.asObservable();
