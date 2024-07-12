@@ -13,9 +13,9 @@ services:
       - db:/data/db
   sisyphus-api:
     container_name: sisyphus-api
-    image: sisyphus/sisyphus:1.0.3
+    image: sisyphus/sisyphus:1.0.4
     ports:
-      - '8080:8080'
+      - '8088:8088'
     depends_on:
       - mongo_db
   sisyphus-frontend:
