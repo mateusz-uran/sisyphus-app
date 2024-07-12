@@ -10,7 +10,7 @@ import { Observable, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class WorkApplicationsService {
-  private apiUrl = 'http://localhost:8080/applications';
+  private apiUrl = 'http://localhost:8088/applications';
 
   constructor(private http: HttpClient) {}
 
