@@ -8,7 +8,7 @@ RUN mvn clean package -DskipTests
 
 # Runtime stage
 FROM amazoncorretto:17
-ARG PROFILE=dev
+ARG PROFILE=pipeline
 ARG APP_VERSION=1.0.0
 
 WORKDIR /app
@@ -20,4 +20,4 @@ ENV DB_URL mongodb://johndoe:password@mongo_db:27017/sisyphus-db?authSource=admi
 ENV ACTIVE_PROFILE=${PROFILE}
 ENV JAR_VERSION=${APP_VERSION}
 
-CMD java -jar -Dspring.profiles.actives=${ACTIVE_PROFILE} -Dspring.data.mongodb.uri=${DB_URL} sisyphus-app-${JAR_VERSION}.jar
+CMD java -jar -Dspring.profiles.active=${ACTIVE_PROFILE} -Dspring.data.mongodb.uri=${DB_URL} sisyphus-app-${JAR_VERSION}.jar
