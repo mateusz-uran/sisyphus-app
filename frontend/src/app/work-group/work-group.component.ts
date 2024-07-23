@@ -31,11 +31,11 @@ import { RouterModule } from '@angular/router';
         </div>
         <div class="group-content">
           <p>Aplikacji</p>
-          <p>{{ workGroup.applied }}</p>
+          <p>{{ workGroup.sent }}</p>
         </div>
         <div class="group-content">
           <p>Odrzucone</p>
-          <p>{{ workGroup.denied }}</p>
+          <p>{{ workGroup.rejected }}</p>
         </div>
         <div class="group-content">
           <p>W trakcie</p>
