@@ -71,7 +71,7 @@ public class WorkApplicationsServiceTest {
     public void givenApplicationIdAndStatus_whenUpdate_thenReturnUpdatedApplication() {
         //given
         String workApplicationId = "1234";
-        var newStatus = "DENIED";
+        var newStatus = "REJECTED";
         WorkApplications work = WorkApplications.builder().workUrl("work1").status(ApplicationStatus.IN_PROGRESS).build();
         when(repository.findById(workApplicationId)).thenReturn(Optional.of(work));
 

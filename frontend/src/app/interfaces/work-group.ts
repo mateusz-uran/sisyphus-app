@@ -4,7 +4,7 @@ export interface WorkGroup {
   cvFileName: string;
   creationTime: string;
   applied: number;
-  denied: number;
+  rejected: number;
   inProgress: number;
   isHired: boolean;
 }
@@ -15,7 +15,7 @@ export interface TransformedWorkGroup {
   cvFileName: string;
   creationTime: string;
   applied: number;
-  denied: number;
+  rejected: number;
   inProgress: number;
   isHired: boolean;
 }

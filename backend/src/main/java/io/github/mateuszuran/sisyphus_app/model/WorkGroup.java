@@ -21,8 +21,8 @@ public class WorkGroup {
     private Binary cvData;
     private String cvFileName;
     private String creationTime;
-    private int send;
-    private int denied;
+    private int sent;
+    private int rejected;
     private int inProgress;
     private boolean isHired;
 

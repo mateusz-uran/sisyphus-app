@@ -95,22 +95,22 @@ public class WorkApplicationsIntegrationTest extends AbstractIntegrationTest {
                 .findFirst();
 
         Assertions.assertTrue(savedWork.isPresent());
-        Assertions.assertEquals(savedWork.get().getStatus(), ApplicationStatus.SEND);
-        Assertions.assertEquals(groupResult.getSend(), 1);
+        Assertions.assertEquals(savedWork.get().getStatus(), ApplicationStatus.SENT);
+        Assertions.assertEquals(groupResult.getSent(), 1);
     }
 
     @Test
     void givenWorkApplication_whenDelete_thenReturnStatus() throws Exception {
         //given
-        WorkApplications work1 = WorkApplications.builder().workUrl("work_url1").status(ApplicationStatus.SEND).build();
+        WorkApplications work1 = WorkApplications.builder().workUrl("work_url1").status(ApplicationStatus.SENT).build();
         WorkApplications work2 = WorkApplications.builder().workUrl("work_url2").status(ApplicationStatus.IN_PROGRESS).build();
         applicationsRepository.saveAll(List.of(work1, work2));
 
         WorkGroup group = WorkGroup.builder()
                 .cvData(null)
                 .creationTime("today")
-                .send(15)
-                .denied(4)
+                .sent(15)
+                .rejected(4)
                 .inProgress(12)
                 .workApplications(new ArrayList<>())
                 .build();
@@ -125,21 +125,21 @@ public class WorkApplicationsIntegrationTest extends AbstractIntegrationTest {
         Assertions.assertNotNull(applicationsRepository.findById(work1.getId()));
 
         var editedGroup = groupRepository.findById(group.getId()).orElseThrow();
-        Assertions.assertEquals(14, editedGroup.getSend());
+        Assertions.assertEquals(14, editedGroup.getSent());
     }
 
     @Test
     void givenApplicationIdAndStatus_whenUpdateStatus_thenReturnWorkApplicationAndUpdateWorkGroupCounters() throws Exception {
         //given
-        String newStatus = "send";
-        WorkApplications work1 = WorkApplications.builder().workUrl("work_url1").status(ApplicationStatus.DENIED).build();
+        String newStatus = "sent";
+        WorkApplications work1 = WorkApplications.builder().workUrl("work_url1").status(ApplicationStatus.REJECTED).build();
         applicationsRepository.save(work1);
 
         WorkGroup group = WorkGroup.builder()
                 .cvData(null)
                 .creationTime("today")
-                .send(15)
-                .denied(4)
+                .sent(15)
+                .rejected(4)
                 .inProgress(12)
                 .workApplications(new ArrayList<>())
                 .build();
@@ -154,8 +154,8 @@ public class WorkApplicationsIntegrationTest extends AbstractIntegrationTest {
         //then
         var updatedGroup = groupRepository.findById(savedGroup.getId()).orElseThrow();
         Assertions.assertNotNull(updatedGroup);
-        Assertions.assertEquals(3, updatedGroup.getDenied());
-        Assertions.assertEquals(16, updatedGroup.getSend());
+        Assertions.assertEquals(3, updatedGroup.getRejected());
+        Assertions.assertEquals(16, updatedGroup.getSent());
     }
 
     @Test
@@ -168,8 +168,8 @@ public class WorkApplicationsIntegrationTest extends AbstractIntegrationTest {
         WorkGroup group = WorkGroup.builder()
                 .cvData(null)
                 .creationTime("today")
-                .send(15)
-                .denied(4)
+                .sent(15)
+                .rejected(4)
                 .inProgress(12)
                 .isHired(false)
                 .workApplications(new ArrayList<>())
@@ -185,8 +185,8 @@ public class WorkApplicationsIntegrationTest extends AbstractIntegrationTest {
         //then
         var updatedGroup = groupRepository.findById(savedGroup.getId()).orElseThrow();
         Assertions.assertNotNull(updatedGroup);
-        Assertions.assertEquals(updatedGroup.getDenied(), 4);
-        Assertions.assertEquals(updatedGroup.getSend(), 15);
+        Assertions.assertEquals(updatedGroup.getRejected(), 4);
+        Assertions.assertEquals(updatedGroup.getSent(), 15);
         Assertions.assertTrue(updatedGroup.isHired());
     }
 
@@ -200,8 +200,8 @@ public class WorkApplicationsIntegrationTest extends AbstractIntegrationTest {
         WorkGroup group = WorkGroup.builder()
                 .cvData(null)
                 .creationTime("today")
-                .send(15)
-                .denied(4)
+                .sent(15)
+                .rejected(4)
                 .inProgress(12)
                 .isHired(true)
                 .workApplications(new ArrayList<>())
@@ -217,8 +217,8 @@ public class WorkApplicationsIntegrationTest extends AbstractIntegrationTest {
         //then
         var updatedGroup = groupRepository.findById(savedGroup.getId()).orElseThrow();
         Assertions.assertNotNull(updatedGroup);
-        Assertions.assertEquals(updatedGroup.getDenied(), 4);
-        Assertions.assertEquals(updatedGroup.getSend(), 15);
+        Assertions.assertEquals(updatedGroup.getRejected(), 4);
+        Assertions.assertEquals(updatedGroup.getSent(), 15);
         Assertions.assertFalse(updatedGroup.isHired());
     }
 }

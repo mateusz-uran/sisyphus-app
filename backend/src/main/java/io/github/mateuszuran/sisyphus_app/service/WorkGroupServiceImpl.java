@@ -32,8 +32,8 @@ public class WorkGroupServiceImpl implements WorkGroupService {
                     .cvData(cv)
                     .cvFileName(file.getOriginalFilename())
                     .creationTime(creationTime)
-                    .send(0)
-                    .denied(0)
+                    .sent(0)
+                    .rejected(0)
                     .inProgress(0)
                     .isHired(false)
                     .build();
@@ -56,13 +56,13 @@ public class WorkGroupServiceImpl implements WorkGroupService {
         }
         WorkGroup groupToUpdate = getWorkGroup(workGroupId);
         groupToUpdate.getWorkApplications().addAll(applications);
-        var sendValue = groupToUpdate.getSend();
+        var sendValue = groupToUpdate.getSent();
 
         if (sendValue != 0) {
-            groupToUpdate.setSend(sendValue + applications.size());
+            groupToUpdate.setSent(sendValue + applications.size());
 
         } else {
-            groupToUpdate.setSend(applications.size());
+            groupToUpdate.setSent(applications.size());
         }
 
         return repository.save(groupToUpdate);
@@ -107,14 +107,14 @@ public class WorkGroupServiceImpl implements WorkGroupService {
 
     private void adjustOldStatusCount(String oldStatus, WorkGroup group) {
         switch (oldStatus.toUpperCase()) {
-            case "SEND":
-                group.setSend(Math.max(0, group.getSend() - 1));
+            case "SENT":
+                group.setSent(Math.max(0, group.getSent() - 1));
                 break;
             case "IN_PROGRESS":
                 group.setInProgress(Math.max(0, group.getInProgress() - 1));
                 break;
-            case "DENIED":
-                group.setDenied(Math.max(0, group.getDenied() - 1));
+            case "REJECTED":
+                group.setRejected(Math.max(0, group.getRejected() - 1));
                 break;
             case "HIRED":
                 group.setHired(false);
@@ -123,14 +123,14 @@ public class WorkGroupServiceImpl implements WorkGroupService {
 
     private void adjustNewStatusCount(String newStatus, WorkGroup group) {
         switch (newStatus.toUpperCase()) {
-            case "SEND":
-                group.setSend(group.getSend() + 1);
+            case "SENT":
+                group.setSent(group.getSent() + 1);
                 break;
             case "IN_PROGRESS":
                 group.setInProgress(group.getInProgress() + 1);
                 break;
-            case "DENIED":
-                group.setDenied(group.getDenied() + 1);
+            case "REJECTED":
+                group.setRejected(group.getRejected() + 1);
                 break;
             case "HIRED":
                 group.setHired(true);
@@ -159,8 +159,8 @@ public class WorkGroupServiceImpl implements WorkGroupService {
                 .cvData(encodeBinaryCv(group.getCvData()))
                 .cvFileName(group.getCvFileName())
                 .creationTime(group.getCreationTime())
-                .applied(group.getSend())
-                .denied(group.getDenied())
+                .applied(group.getSent())
+                .rejected(group.getRejected())
                 .inProgress(group.getInProgress())
                 .isHired(group.isHired())
                 .build();
@@ -176,8 +176,8 @@ public class WorkGroupServiceImpl implements WorkGroupService {
                                 .cvData(encodeBinaryCv(group.getCvData()))
                                 .cvFileName(group.getCvFileName())
                                 .creationTime(group.getCreationTime())
-                                .applied(group.getSend())
-                                .denied(group.getDenied())
+                                .applied(group.getSent())
+                                .rejected(group.getRejected())
                                 .inProgress(group.getInProgress())
                                 .isHired(group.isHired())
                                 .build())
