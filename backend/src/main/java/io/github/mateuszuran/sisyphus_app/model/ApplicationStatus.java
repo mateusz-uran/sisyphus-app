@@ -1,7 +1,7 @@
 package io.github.mateuszuran.sisyphus_app.model;
 
 public enum ApplicationStatus {
-    IN_PROGRESS, DENIED, SEND, HIRED;
+    IN_PROGRESS, REJECTED, SENT, HIRED;
 
     public static ApplicationStatus getByUpperCaseStatus(String status) {
         if (status == null || status.isEmpty()) {

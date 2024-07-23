@@ -31,7 +31,7 @@ public class WorkApplicationsServiceImpl implements WorkApplicationsService {
                 .map(work -> WorkApplications.builder()
                         .workUrl(work.workUrl())
                         .appliedDate(creationTime)
-                        .status(ApplicationStatus.SEND)
+                        .status(ApplicationStatus.SENT)
                         .build())
                 .toList();
 

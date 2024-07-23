@@ -61,7 +61,7 @@ public class WorkGroupIntegrationTest extends AbstractIntegrationTest {
         var groups = repository.findAll();
 
         Assertions.assertNotNull(groups);
-        Assertions.assertEquals(groups.get(0).getSend(), 0);
+        Assertions.assertEquals(groups.get(0).getSent(), 0);
     }
 
     @Test
@@ -79,7 +79,7 @@ public class WorkGroupIntegrationTest extends AbstractIntegrationTest {
     void givenWorKGroup_whenGet_thenReturnSingleObject() throws Exception {
         var pdf = new Binary(fakePdf());
 
-        WorkGroup group = WorkGroup.builder().cvData(pdf).creationTime("tomorrow").send(15).denied(4).inProgress(12).build();
+        WorkGroup group = WorkGroup.builder().cvData(pdf).creationTime("tomorrow").sent(15).rejected(4).inProgress(12).build();
         var savedWorkGroup = repository.save(group);
 
         mockMvc.perform(get("/group/single/" + savedWorkGroup.getId()))
@@ -90,7 +90,7 @@ public class WorkGroupIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void givenWorkGroup_thenDelete_thenReturnStatusOk() throws Exception {
-        WorkGroup group = WorkGroup.builder().creationTime("tomorrow").send(15).denied(4).inProgress(12).build();
+        WorkGroup group = WorkGroup.builder().creationTime("tomorrow").sent(15).rejected(4).inProgress(12).build();
         var savedWorkGroup = repository.save(group);
 
         mockMvc.perform(delete("/group/delete/" + savedWorkGroup.getId()))

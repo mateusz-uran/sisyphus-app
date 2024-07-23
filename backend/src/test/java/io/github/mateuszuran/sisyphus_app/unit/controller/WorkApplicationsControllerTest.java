@@ -50,8 +50,8 @@ class WorkApplicationsControllerTest {
     void givenWorkGroupId_whenGetAllApplications_thenReturnListOfWorkApplications() throws Exception {
         //given
         String workGroupId = "1234";
-        WorkApplications applications1 = WorkApplications.builder().workUrl("url1").status(ApplicationStatus.SEND).build();
-        WorkApplications applications2 = WorkApplications.builder().workUrl("url2").status(ApplicationStatus.DENIED).build();
+        WorkApplications applications1 = WorkApplications.builder().workUrl("url1").status(ApplicationStatus.SENT).build();
+        WorkApplications applications2 = WorkApplications.builder().workUrl("url2").status(ApplicationStatus.REJECTED).build();
         WorkApplications applications3 = WorkApplications.builder().workUrl("url3").status(ApplicationStatus.IN_PROGRESS).build();
         List<WorkApplications> expectedList = List.of(applications1, applications2, applications3);
 
@@ -62,7 +62,7 @@ class WorkApplicationsControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].workUrl").value("url1"))
-                .andExpect(jsonPath("$.[0].status").value("SEND"));
+                .andExpect(jsonPath("$.[0].status").value("SENT"));
     }
 
     @Test

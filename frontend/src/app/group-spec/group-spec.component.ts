@@ -59,7 +59,7 @@ export class GroupSpecComponent {
   workGroupId$ = this.activatedRoute.params.pipe(map((p) => p['workGroupId']));
 
   workApplications: WorkApplication[] = [];
-  workStatus: string[] = ['IN_PROGRESS', 'SEND', 'DENIED', 'HIRED'];
+  workStatus: string[] = ['IN_PROGRESS', 'SENT', 'REJECTED', 'HIRED'];
   isScreenSmall: boolean = false;
 
   constructor() {
