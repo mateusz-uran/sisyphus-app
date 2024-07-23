@@ -3,7 +3,7 @@ export interface WorkGroup {
   cvData: string;
   cvFileName: string;
   creationTime: string;
-  sent: number;
+  applied: number;
   rejected: number;
   inProgress: number;
   isHired: boolean;
@@ -14,7 +14,7 @@ export interface TransformedWorkGroup {
   cvData: Blob;
   cvFileName: string;
   creationTime: string;
-  sent: number;
+  applied: number;
   rejected: number;
   inProgress: number;
   isHired: boolean;

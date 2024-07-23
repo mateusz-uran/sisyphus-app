@@ -31,7 +31,7 @@ import { RouterModule } from '@angular/router';
         </div>
         <div class="group-content">
           <p>Aplikacji</p>
-          <p>{{ workGroup.sent }}</p>
+          <p>{{ workGroup.applied }}</p>
         </div>
         <div class="group-content">
           <p>Odrzucone</p>
