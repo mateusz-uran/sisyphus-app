@@ -160,7 +160,7 @@ public class WorkGroupServiceImpl implements WorkGroupService {
                 .cvFileName(group.getCvFileName())
                 .creationTime(group.getCreationTime())
                 .applied(group.getSent())
-                .denied(group.getRejected())
+                .rejected(group.getRejected())
                 .inProgress(group.getInProgress())
                 .isHired(group.isHired())
                 .build();
@@ -177,7 +177,7 @@ public class WorkGroupServiceImpl implements WorkGroupService {
                                 .cvFileName(group.getCvFileName())
                                 .creationTime(group.getCreationTime())
                                 .applied(group.getSent())
-                                .denied(group.getRejected())
+                                .rejected(group.getRejected())
                                 .inProgress(group.getInProgress())
                                 .isHired(group.isHired())
                                 .build())
