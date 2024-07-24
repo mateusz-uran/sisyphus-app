@@ -61,7 +61,11 @@ export class WorkGroupComponent {
   @Input() workGroup!: TransformedWorkGroup;
   workGroupService: WorkGroupService = inject(WorkGroupService);
 
-  constructor() {}
+  constructor() {
+    this.workGroupService.scraperCall().subscribe((response) => {
+      console.log(response);
+    });
+  }
 
   ngOnInit(): void {}
 

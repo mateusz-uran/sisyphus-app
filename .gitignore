@@ -7,3 +7,6 @@
 /frontend/dist/
 /out/
 /.idea/
+/python/.venv/
+/python/.idea/
+/notes

@@ -25,6 +25,14 @@ export class WorkGroupService {
     this.getWorkGroups().subscribe();
   }
 
+  scraperCall(): Observable<any> {
+    const pythonApi = 'http://127.0.0.1:5858/scrape/nofluffjobs';
+    const url =
+      'https://nofluffjobs.com/pl/job/senior-software-engineer-commerce-media-tech-krakow-it012jej';
+    // Make sure to send the URL as part of an object
+    return this.http.post(pythonApi, { url: url });
+  }
+
   getWorkGroups(): Observable<TransformedWorkGroup[]> {
     return this.http.get<WorkGroup[]>(`${this.apiUrl}/all`).pipe(
       map((workGroups) =>
