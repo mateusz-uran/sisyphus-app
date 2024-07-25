@@ -79,7 +79,7 @@ public class WorkApplicationsServiceImpl implements WorkApplicationsService {
     @Override
     public Mono<WorkApplications> updateWorkApplicationSpecificationsReactive(String applicationId, WorkSpecification specification) {
         if (specification == null) {
-            throw new IllegalStateException("Specification is empty");
+            return Mono.error(new IllegalStateException("Specification is empty"));
         }
         return getSingleApplicationReactive(applicationId)
                 .flatMap(application -> {
