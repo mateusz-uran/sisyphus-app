@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import {
   WorkApplication,
   WorkApplicationDTO,
+  WorkSpecificationDTO,
 } from '../interfaces/work-application';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -12,6 +13,7 @@ import { environment } from '../../environments/environment';
 })
 export class WorkApplicationsService {
   private apiUrl = environment.apiUrl + '/applications';
+  private scraperUrl = environment.scraperUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -37,5 +39,15 @@ export class WorkApplicationsService {
 
   deleteWorkApplication(applicationId: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/delete/${applicationId}`);
+  }
+
+  scrapWorkApplicationSpecification(
+    pageType: string,
+    url: string
+  ): Observable<WorkSpecificationDTO> {
+    return this.http.post<WorkSpecificationDTO>(
+      `${this.scraperUrl}/${pageType}`,
+      { url }
+    );
   }
 }

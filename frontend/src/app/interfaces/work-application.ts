@@ -8,3 +8,9 @@ export interface WorkApplication {
 export interface WorkApplicationDTO {
   workUrl: string;
 }
+
+export interface WorkSpecificationDTO {
+  companyName: string;
+  requirementsExpected: string[];
+  technologiesExpected: string[];
+}

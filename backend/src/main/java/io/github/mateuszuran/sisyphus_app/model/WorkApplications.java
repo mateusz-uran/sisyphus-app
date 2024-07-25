@@ -3,6 +3,9 @@ package io.github.mateuszuran.sisyphus_app.model;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,4 +20,7 @@ public class WorkApplications {
     private String workUrl;
     private String appliedDate;
     private ApplicationStatus status;
+
+    @DocumentReference(lazy = true)
+    WorkSpecification specification;
 }

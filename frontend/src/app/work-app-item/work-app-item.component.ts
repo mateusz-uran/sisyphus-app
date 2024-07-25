@@ -1,10 +1,11 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorkApplication } from '../interfaces/work-application';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { WorkApplicationsService } from '../services/work-applications.service';
 
 @Component({
   selector: 'app-work-app-item',
@@ -28,6 +29,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
             {{ app.workUrl }}
           </p>
           <a mat-stroked-button [href]="app.workUrl">Otwórz</a>
+          <button
+            (click)="gatherJobSpecifications('nofluffjobs', app.workUrl)"
+            mat-button
+          >
+            Zaktualizuj
+          </button>
         </div>
         <div class="application-date">
           <p class="h-font-small">Data aplikowania</p>
@@ -67,6 +74,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   styleUrl: './work-app-item.component.scss',
 })
 export class WorkAppItemComponent {
+  workApplicationService: WorkApplicationsService = inject(
+    WorkApplicationsService
+  );
+
   app = input<WorkApplication>();
   workStatus = input<string[]>();
   isScreenSmall = input<boolean>();
@@ -94,5 +105,21 @@ export class WorkAppItemComponent {
 
   deleteWork(appId: string) {
     this.delete.emit(appId);
+  }
+
+  gatherJobSpecifications(pageType: string, url: string) {
+    console.log(
+      'Call spring boot app with pageType: ' +
+        pageType +
+        ' and workUrl: ' +
+        url +
+        ' and receive work specification as a response'
+    );
+
+    // this.workApplicationService
+    //   .scrapWorkApplicationSpecification(pageType, url)
+    //   .subscribe((response) => {
+    //     console.log(response);
+    //   });
   }
 }

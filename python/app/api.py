@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from scraper import scrap_nofluffjobs, scrap_pracuj
 
-frontend_url = os.environ['FRONTEND_URL']
+frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:4200")
 
 app = Flask(__name__)
 CORS(app, origins=frontend_url)
