@@ -1,5 +1,7 @@
 package io.github.mateuszuran.sisyphus_app.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.mateuszuran.sisyphus_app.dto.WorkSpecificationDTO;
 import io.github.mateuszuran.sisyphus_app.model.WorkSpecification;
 import io.github.mateuszuran.sisyphus_app.repository.WorkSpecificationRepository;
@@ -26,7 +28,16 @@ public class WorkSpecificationsImpl implements WorkSpecificationsService {
                 .header("Content-Type", "application/json")
                 .bodyValue(url)
                 .retrieve()
-                .bodyToMono(WorkSpecificationDTO.class);
+                .bodyToMono(String.class)
+                .flatMap(response -> {
+                    try {
+                        WorkSpecificationDTO workSpec = new ObjectMapper().readValue(response, WorkSpecificationDTO.class);
+                        return Mono.just(workSpec);
+                    } catch (JsonProcessingException e) {
+                        // TODO: create custom exception
+                        return Mono.error(new IllegalStateException("Unexpected response type: " + response));
+                    }
+                });
     }
 
 

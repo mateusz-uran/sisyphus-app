@@ -5,6 +5,7 @@ import io.github.mateuszuran.sisyphus_app.model.ApplicationStatus;
 import io.github.mateuszuran.sisyphus_app.model.WorkApplications;
 import io.github.mateuszuran.sisyphus_app.repository.WorkApplicationsRepository;
 import io.github.mateuszuran.sisyphus_app.service.WorkApplicationsServiceImpl;
+import io.github.mateuszuran.sisyphus_app.service.WorkSpecificationsImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ class WorkApplicationsControllerTest {
     MockMvc mockMvc;
     @MockBean
     WorkApplicationsServiceImpl serviceImpl;
+    @MockBean
+    WorkSpecificationsImpl specServiceImpl;
 
     @MockBean
     WorkApplicationsRepository repository;
