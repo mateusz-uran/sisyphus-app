@@ -5,6 +5,6 @@ import reactor.core.publisher.Mono;
 
 public interface WorkSpecificationsService {
 
-    Mono<WorkSpecification> saveSpecification(String type, String url, String appId);
+    Mono<WorkSpecification> saveSpecification(String url, String appId);
 
 }

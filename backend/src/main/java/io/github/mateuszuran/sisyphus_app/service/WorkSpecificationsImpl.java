@@ -20,9 +20,9 @@ public class WorkSpecificationsImpl implements WorkSpecificationsService {
     // replace with variable in application.properties
     private String scrapeApiUrl = "http://127.0.0.1:5858/scrape";
 
-    private Mono<WorkSpecificationDTO> scraperJob(String type, String url) {
+    private Mono<WorkSpecificationDTO> scraperJob(String url) {
         return webClient.build().post()
-                .uri(scrapeApiUrl + "/{type}", type)
+                .uri(scrapeApiUrl)
                 .header("Content-Type", "application/json")
                 .bodyValue(url)
                 .retrieve()
@@ -32,8 +32,8 @@ public class WorkSpecificationsImpl implements WorkSpecificationsService {
 
     // TODO: replace runtime with custom exceptions
     @Override
-    public Mono<WorkSpecification> saveSpecification(String type, String url, String appId) {
-        return scraperJob(type, url)
+    public Mono<WorkSpecification> saveSpecification(String url, String appId) {
+        return scraperJob(url)
                 .flatMap(response -> {
                     if (checkResponse(response)) {
                         return Mono.error(new RuntimeException("Empty scraper response"));

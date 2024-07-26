@@ -43,8 +43,8 @@ public class WorkApplicationsController {
         return ResponseEntity.ok().body(service.updateApplicationStatus(applicationId, status));
     }
 
-    @PostMapping("/spec/{applicationId}/{type}")
-    public Mono<WorkSpecification> scrape(@PathVariable String type, @PathVariable String applicationId, @RequestBody String url) {
-        return specService.saveSpecification(type, url, applicationId);
+    @PostMapping("/spec/{applicationId}")
+    public Mono<WorkSpecification> scrape( @PathVariable String applicationId, @RequestBody String url) {
+        return specService.saveSpecification(url, applicationId);
     }
 }
