@@ -7,6 +7,7 @@ import io.github.mateuszuran.sisyphus_app.model.WorkSpecification;
 import io.github.mateuszuran.sisyphus_app.repository.WorkSpecificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -19,8 +20,8 @@ public class WorkSpecificationsImpl implements WorkSpecificationsService {
     private final WebClient.Builder webClient;
     private final WorkApplicationsServiceImpl appService;
 
-    // replace with variable in application.properties
-    private String scrapeApiUrl = "http://127.0.0.1:5858/scrape";
+    @Value("${scraper.api}")
+    private String scrapeApiUrl;
 
     private Mono<WorkSpecificationDTO> scraperJob(String url) {
         return webClient.build().post()
@@ -70,9 +71,9 @@ public class WorkSpecificationsImpl implements WorkSpecificationsService {
     }
 
     private boolean checkResponse(WorkSpecificationDTO response) {
-        return response.company_name().isEmpty() ||
-                response.requirements_expected().isEmpty() ||
-                response.technologies_expected().isEmpty();
+        return (response.company_name() == null || response.company_name().isEmpty()) ||
+                (response.requirements_expected() == null || response.requirements_expected().isEmpty()) ||
+                (response.technologies_expected() == null || response.technologies_expected().isEmpty());
     }
 
     private WorkSpecification mapWorkSpecDTOtoWorkSpec(WorkSpecificationDTO dto) {

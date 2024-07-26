@@ -31,7 +31,7 @@ public class BeansConfig {
     }
 
     @Bean
-    public WebClient webClient() {
-        return WebClient.builder().build();
+    public WebClient.Builder webClientBuilder() {
+        return WebClient.builder();
     }
 }
