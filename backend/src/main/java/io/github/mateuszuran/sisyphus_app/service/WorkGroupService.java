@@ -1,6 +1,6 @@
 package io.github.mateuszuran.sisyphus_app.service;
 
-import io.github.mateuszuran.sisyphus_app.model.WorkApplications;
+import io.github.mateuszuran.sisyphus_app.model.Applications;
 import io.github.mateuszuran.sisyphus_app.model.WorkGroup;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,15 +12,15 @@ public interface WorkGroupService {
 
     WorkGroup getWorkGroup(String workGroupId);
 
-    WorkGroup updateWorkGroupWithWorkApplications(List<WorkApplications> applications, String workGroupId);
+    WorkGroup updateWorkGroupWithApplications(List<Applications> applications, String workGroupId);
 
     List<WorkGroup> getAllGroups();
 
     void deleteSingleGroup(String workGroupId);
 
-    List<WorkApplications> getAllWorkApplicationsFromWorkGroup(String workGroupId);
+    List<Applications> getAllApplicationsFromWorkGroup(String workGroupId);
 
-    void updateGroupWhenWorkUpdate(WorkApplications work, String newStatus, String oldStatus);
+    void updateGroupWhenApplicationUpdate(Applications work, String newStatus, String oldStatus);
 
-    void updateGroupWhenWorkDelete(WorkApplications work);
+    void updateGroupWhenApplicationDelete(Applications work);
 }

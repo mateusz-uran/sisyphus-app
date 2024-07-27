@@ -1,5 +1,6 @@
 package io.github.mateuszuran.sisyphus_app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,8 +13,9 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "work_specifications")
-public class WorkSpecification {
+@Document(collection = "specifications")
+@JsonIgnoreProperties(value = { "target", "source" })
+public class Specification {
     @Id
     private String id;
 
@@ -25,7 +27,7 @@ public class WorkSpecification {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WorkSpecification that = (WorkSpecification) o;
+        Specification that = (Specification) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(technologies, that.technologies) &&
                 Objects.equals(requirements, that.requirements) &&

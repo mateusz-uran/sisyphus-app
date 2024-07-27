@@ -1,8 +1,8 @@
 package io.github.mateuszuran.sisyphus_app.unit.controller;
 
-import io.github.mateuszuran.sisyphus_app.controller.WorkGroupController;
+import io.github.mateuszuran.sisyphus_app.controller.GroupController;
 import io.github.mateuszuran.sisyphus_app.dto.WorkGroupDTO;
-import io.github.mateuszuran.sisyphus_app.repository.WorkGroupRepository;
+import io.github.mateuszuran.sisyphus_app.repository.GroupRepository;
 import io.github.mateuszuran.sisyphus_app.service.WorkGroupServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,15 +24,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(WorkGroupController.class)
+@WebMvcTest(GroupController.class)
 @AutoConfigureMockMvc
-class WorkGroupControllerTest {
+class GroupControllerTest {
 
     @Autowired
     MockMvc mockMvc;
 
     @MockBean
-    WorkGroupRepository repository;
+    GroupRepository repository;
     @MockBean
     WorkGroupServiceImpl service;
 

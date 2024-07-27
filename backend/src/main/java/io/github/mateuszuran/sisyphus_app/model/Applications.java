@@ -5,15 +5,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-import java.util.List;
-
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "work_applications")
-public class WorkApplications {
+@Document(collection = "applications")
+public class Applications {
     @Id
     private String id;
 
@@ -22,5 +20,5 @@ public class WorkApplications {
     private ApplicationStatus status;
 
     @DocumentReference(lazy = true)
-    WorkSpecification specification;
+    private Specification specification;
 }

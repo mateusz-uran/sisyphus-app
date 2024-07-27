@@ -2,11 +2,11 @@ package io.github.mateuszuran.sisyphus_app.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.mateuszuran.sisyphus_app.SisyphusAppApplication;
-import io.github.mateuszuran.sisyphus_app.dto.WorkSpecificationDTO;
-import io.github.mateuszuran.sisyphus_app.model.WorkSpecification;
-import io.github.mateuszuran.sisyphus_app.repository.WorkSpecificationRepository;
-import io.github.mateuszuran.sisyphus_app.service.WorkApplicationsServiceImpl;
-import io.github.mateuszuran.sisyphus_app.service.WorkSpecificationsServiceImpl;
+import io.github.mateuszuran.sisyphus_app.dto.SpecificationDTO;
+import io.github.mateuszuran.sisyphus_app.model.Specification;
+import io.github.mateuszuran.sisyphus_app.repository.SpecificationRepository;
+import io.github.mateuszuran.sisyphus_app.service.ApplicationsServiceImpl;
+import io.github.mateuszuran.sisyphus_app.service.SpecificationsServiceImpl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.Test;
@@ -31,11 +31,11 @@ import static org.mockito.Mockito.when;
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,
         classes = SisyphusAppApplication.class)
 @AutoConfigureMockMvc
-public class WorkSpecificationIntegrationTest {
+public class SpecificationIntegrationTest {
     private static MockWebServer mockBackEnd;
-    private WorkSpecificationsServiceImpl workSpecificationsServiceImpl;
-    private WorkApplicationsServiceImpl appService;
-    private WorkSpecificationRepository repository;
+    private SpecificationsServiceImpl workSpecificationsServiceImpl;
+    private ApplicationsServiceImpl appService;
+    private SpecificationRepository repository;
     private ObjectMapper objectMapper;
 
     @BeforeAll
@@ -55,10 +55,10 @@ public class WorkSpecificationIntegrationTest {
         WebClient webClient = WebClient.create(mockBackEnd.url("/").toString());
         when(webClientBuilder.build()).thenReturn(webClient);
 
-        appService = mock(WorkApplicationsServiceImpl.class);
-        repository = mock(WorkSpecificationRepository.class);
+        appService = mock(ApplicationsServiceImpl.class);
+        repository = mock(SpecificationRepository.class);
 
-        workSpecificationsServiceImpl = new WorkSpecificationsServiceImpl(repository, webClientBuilder, appService);
+        workSpecificationsServiceImpl = new SpecificationsServiceImpl(repository, webClientBuilder, appService);
         objectMapper = new ObjectMapper();
     }
 
@@ -66,13 +66,13 @@ public class WorkSpecificationIntegrationTest {
     @Test
     void givenUrlAndAppId_whenNotExistsAndCanScrap_thenReturnSavedSpecJob() throws Exception {
         // Prepare mock responses
-        WorkSpecificationDTO mockDTO = WorkSpecificationDTO.builder()
+        SpecificationDTO mockDTO = SpecificationDTO.builder()
                 .company_name("company")
                 .requirements_expected(List.of("req1", "req2"))
                 .technologies_expected(List.of("tech1", "tech2"))
                 .build();
 
-        WorkSpecification mockSpec = WorkSpecification.builder()
+        Specification mockSpec = Specification.builder()
                 .companyName("company")
                 .requirements(List.of("req1", "req2"))
                 .technologies(List.of("tech1", "tech2"))
@@ -82,12 +82,12 @@ public class WorkSpecificationIntegrationTest {
                 .setBody(objectMapper.writeValueAsString(mockDTO))
                 .addHeader("Content-Type", "application/json"));
 
-        when(appService.checkWorkSpecInsideApplicationReactive(anyString(), any())).thenReturn(Mono.just(false));
+        when(appService.checkSpecInsideApplicationReactive(anyString(), any())).thenReturn(Mono.just(false));
         when(repository.save(any())).thenReturn(mockSpec);
-        when(appService.updateWorkApplicationSpecificationsReactive(anyString(), any())).thenReturn(Mono.empty());
+        when(appService.updateApplicationSpecificationsReactive(anyString(), any())).thenReturn(Mono.empty());
 
         // Call the method
-        Mono<WorkSpecification> result = workSpecificationsServiceImpl.saveSpecification("fake_job_url", "1234");
+        Mono<Specification> result = workSpecificationsServiceImpl.saveSpecification("fake_job_url", "1234");
 
         // Verify the result
         StepVerifier.create(result)
@@ -102,7 +102,7 @@ public class WorkSpecificationIntegrationTest {
                 .addHeader("Content-Type", "application/json"));
 
         // Call the method
-        Mono<WorkSpecification> result = workSpecificationsServiceImpl.saveSpecification("testUrl", "testAppId");
+        Mono<Specification> result = workSpecificationsServiceImpl.saveSpecification("testUrl", "testAppId");
 
         // Verify error
         StepVerifier.create(result)
@@ -112,7 +112,7 @@ public class WorkSpecificationIntegrationTest {
 
     @Test
     void givenUrlAndId_whenScrapeReturnAndSpecAlreadyExists_thenReturnError() throws Exception {
-        WorkSpecificationDTO mockDTO = WorkSpecificationDTO.builder()
+        SpecificationDTO mockDTO = SpecificationDTO.builder()
                 .company_name("company")
                 .requirements_expected(List.of("req1", "req2"))
                 .technologies_expected(List.of("tech1", "tech2"))
@@ -122,10 +122,10 @@ public class WorkSpecificationIntegrationTest {
                 .setBody(objectMapper.writeValueAsString(mockDTO))
                 .addHeader("Content-Type", "application/json"));
 
-        when(appService.checkWorkSpecInsideApplicationReactive(anyString(), any())).thenReturn(Mono.just(true));
+        when(appService.checkSpecInsideApplicationReactive(anyString(), any())).thenReturn(Mono.just(true));
 
         // Call the method
-        Mono<WorkSpecification> result = workSpecificationsServiceImpl.saveSpecification("testUrl", "testAppId");
+        Mono<Specification> result = workSpecificationsServiceImpl.saveSpecification("testUrl", "testAppId");
 
         // Verify error
         StepVerifier.create(result)
@@ -141,7 +141,7 @@ public class WorkSpecificationIntegrationTest {
                 .addHeader("Content-Type", "application/json"));
 
         // Call the method
-        Mono<WorkSpecification> result = workSpecificationsServiceImpl.saveSpecification("testUrl", "testAppId");
+        Mono<Specification> result = workSpecificationsServiceImpl.saveSpecification("testUrl", "testAppId");
 
         // Verify error
         StepVerifier.create(result)

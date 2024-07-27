@@ -1,10 +1,10 @@
 package io.github.mateuszuran.sisyphus_app.service;
 
-import io.github.mateuszuran.sisyphus_app.dto.WorkApplicationDTO;
+import io.github.mateuszuran.sisyphus_app.dto.ApplicationDTO;
 import io.github.mateuszuran.sisyphus_app.model.ApplicationStatus;
-import io.github.mateuszuran.sisyphus_app.model.WorkApplications;
-import io.github.mateuszuran.sisyphus_app.model.WorkSpecification;
-import io.github.mateuszuran.sisyphus_app.repository.WorkApplicationsRepository;
+import io.github.mateuszuran.sisyphus_app.model.Applications;
+import io.github.mateuszuran.sisyphus_app.model.Specification;
+import io.github.mateuszuran.sisyphus_app.repository.ApplicationsRepository;
 import io.github.mateuszuran.sisyphus_app.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,25 +12,26 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WorkApplicationsServiceImpl implements WorkApplicationsService {
+public class ApplicationsServiceImpl implements ApplicationsService {
 
-    private final WorkApplicationsRepository repository;
+    private final ApplicationsRepository repository;
     private final WorkGroupServiceImpl groupServiceImpl;
     private final TimeUtil timeUtil;
 
     @Override
-    public void createWorkApplication(List<WorkApplicationDTO> applications, String workGroupId) {
+    public void createApplications(List<ApplicationDTO> applications, String workGroupId) {
         String creationTime = timeUtil.formatCreationTime();
 
         // TODO: check if applications list is empty, if so throw exception or something
 
         var workApplicationList = applications
                 .stream()
-                .map(work -> WorkApplications.builder()
+                .map(work -> Applications.builder()
                         .workUrl(work.workUrl())
                         .appliedDate(creationTime)
                         .status(ApplicationStatus.SENT)
@@ -38,19 +39,19 @@ public class WorkApplicationsServiceImpl implements WorkApplicationsService {
                 .toList();
 
         repository.saveAll(workApplicationList);
-        groupServiceImpl.updateWorkGroupWithWorkApplications(workApplicationList, workGroupId);
+        groupServiceImpl.updateWorkGroupWithApplications(workApplicationList, workGroupId);
     }
 
 
     @Override
-    public void deleteWorkApplication(String applicationId) {
+    public void deleteApplication(String applicationId) {
         var applicationToDelete = getSingleApplication(applicationId);
-        groupServiceImpl.updateGroupWhenWorkDelete(applicationToDelete);
+        groupServiceImpl.updateGroupWhenApplicationDelete(applicationToDelete);
         repository.delete(applicationToDelete);
     }
 
     @Override
-    public WorkApplications updateApplicationStatus(String applicationId, String newStatus) {
+    public Applications updateApplicationStatus(String applicationId, String newStatus) {
         var workToUpdate = getSingleApplication(applicationId);
         String oldStatus = workToUpdate.getStatus().name();
 
@@ -63,13 +64,13 @@ public class WorkApplicationsServiceImpl implements WorkApplicationsService {
         workToUpdate.setStatus(ApplicationStatus.getByUpperCaseStatus(newStatus));
         var savedWork = repository.save(workToUpdate);
 
-        groupServiceImpl.updateGroupWhenWorkUpdate(savedWork, workToUpdate.getStatus().name(), oldStatus);
+        groupServiceImpl.updateGroupWhenApplicationUpdate(savedWork, workToUpdate.getStatus().name(), oldStatus);
 
         return savedWork;
     }
 
     @Override
-    public WorkApplications updateWorkApplicationUrl(String applicationId, String applicationUrl) {
+    public Applications updateApplicationUrl(String applicationId, String applicationUrl) {
         var workToUpdate = repository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("Work application with given ID not found."));
         workToUpdate.setWorkUrl(applicationUrl);
@@ -77,7 +78,7 @@ public class WorkApplicationsServiceImpl implements WorkApplicationsService {
     }
 
     @Override
-    public Mono<WorkApplications> updateWorkApplicationSpecificationsReactive(String applicationId, WorkSpecification specification) {
+    public Mono<Applications> updateApplicationSpecificationsReactive(String applicationId, Specification specification) {
         if (specification == null) {
             return Mono.error(new IllegalStateException("Specification is empty"));
         }
@@ -89,27 +90,27 @@ public class WorkApplicationsServiceImpl implements WorkApplicationsService {
     }
 
     @Override
-    public Mono<Boolean> checkWorkSpecInsideApplicationReactive(String applicationId, WorkSpecification spec) {
+    public Mono<Boolean> checkSpecInsideApplicationReactive(String applicationId, Specification spec) {
         return getSingleApplicationReactive(applicationId)
                 .map(application -> {
-                    WorkSpecification existingSpec = application.getSpecification();
+                    Specification existingSpec = application.getSpecification();
                     return existingSpec != null &&
-                            existingSpec.getCompanyName().equals(spec.getCompanyName()) &&
-                            existingSpec.getRequirements().equals(spec.getRequirements()) &&
-                            existingSpec.getTechnologies().equals(spec.getTechnologies());
+                            Objects.equals(existingSpec.getCompanyName(), spec.getCompanyName()) &&
+                            Objects.equals(existingSpec.getRequirements(), spec.getRequirements()) &&
+                            Objects.equals(existingSpec.getTechnologies(), spec.getTechnologies());
                 });
     }
 
-    public List<WorkApplications> getAllApplicationsByWorkGroupId(String workGroupId) {
-        return groupServiceImpl.getAllWorkApplicationsFromWorkGroup(workGroupId);
+    public List<Applications> getAllApplicationsByWorkGroupId(String workGroupId) {
+        return groupServiceImpl.getAllApplicationsFromWorkGroup(workGroupId);
     }
 
-    public WorkApplications getSingleApplication(String applicationId) {
+    public Applications getSingleApplication(String applicationId) {
         return repository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("Work application with given id no exists."));
     }
 
-    public Mono<WorkApplications> getSingleApplicationReactive(String applicationId) {
+    public Mono<Applications> getSingleApplicationReactive(String applicationId) {
         return Mono.fromCallable(() -> repository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("Work application with given id does not exist.")));
     }

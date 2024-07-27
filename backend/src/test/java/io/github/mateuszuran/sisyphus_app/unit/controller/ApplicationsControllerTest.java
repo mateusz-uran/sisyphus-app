@@ -1,12 +1,12 @@
 package io.github.mateuszuran.sisyphus_app.unit.controller;
 
-import io.github.mateuszuran.sisyphus_app.controller.WorkApplicationsController;
+import io.github.mateuszuran.sisyphus_app.controller.ApplicationsController;
 import io.github.mateuszuran.sisyphus_app.model.ApplicationStatus;
-import io.github.mateuszuran.sisyphus_app.model.WorkApplications;
-import io.github.mateuszuran.sisyphus_app.model.WorkSpecification;
-import io.github.mateuszuran.sisyphus_app.repository.WorkApplicationsRepository;
-import io.github.mateuszuran.sisyphus_app.service.WorkApplicationsServiceImpl;
-import io.github.mateuszuran.sisyphus_app.service.WorkSpecificationsServiceImpl;
+import io.github.mateuszuran.sisyphus_app.model.Applications;
+import io.github.mateuszuran.sisyphus_app.model.Specification;
+import io.github.mateuszuran.sisyphus_app.repository.ApplicationsRepository;
+import io.github.mateuszuran.sisyphus_app.service.ApplicationsServiceImpl;
+import io.github.mateuszuran.sisyphus_app.service.SpecificationsServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,39 +28,39 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(WorkApplicationsController.class)
+@WebMvcTest(ApplicationsController.class)
 @AutoConfigureMockMvc
-class WorkApplicationsControllerTest {
+class ApplicationsControllerTest {
 
     @Autowired
     WebTestClient webTestClient;
     @Autowired
     MockMvc mockMvc;
     @MockBean
-    WorkApplicationsServiceImpl serviceImpl;
+    ApplicationsServiceImpl serviceImpl;
     @MockBean
-    WorkSpecificationsServiceImpl specServiceImpl;
+    SpecificationsServiceImpl specServiceImpl;
     @MockBean
-    WorkApplicationsRepository repository;
+    ApplicationsRepository repository;
 
-    List<WorkApplications> works = new ArrayList<>();
+    List<Applications> works = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
         works = List.of(
-                WorkApplications.builder().workUrl("url1").build(),
-                WorkApplications.builder().workUrl("url2").build(),
-                WorkApplications.builder().workUrl("url3").build());
+                Applications.builder().workUrl("url1").build(),
+                Applications.builder().workUrl("url2").build(),
+                Applications.builder().workUrl("url3").build());
     }
 
     @Test
-    void givenWorkGroupId_whenGetAllApplications_thenReturnListOfWorkApplications() throws Exception {
+    void givenWorkGroupId_whenGetAllApplications_thenReturnListOfApplications() throws Exception {
         //given
         String workGroupId = "1234";
-        WorkApplications applications1 = WorkApplications.builder().workUrl("url1").status(ApplicationStatus.SENT).build();
-        WorkApplications applications2 = WorkApplications.builder().workUrl("url2").status(ApplicationStatus.REJECTED).build();
-        WorkApplications applications3 = WorkApplications.builder().workUrl("url3").status(ApplicationStatus.IN_PROGRESS).build();
-        List<WorkApplications> expectedList = List.of(applications1, applications2, applications3);
+        Applications applications1 = Applications.builder().workUrl("url1").status(ApplicationStatus.SENT).build();
+        Applications applications2 = Applications.builder().workUrl("url2").status(ApplicationStatus.REJECTED).build();
+        Applications applications3 = Applications.builder().workUrl("url3").status(ApplicationStatus.IN_PROGRESS).build();
+        List<Applications> expectedList = List.of(applications1, applications2, applications3);
 
         //when
         when(serviceImpl.getAllApplicationsByWorkGroupId(workGroupId)).thenReturn(expectedList);
@@ -91,7 +91,7 @@ class WorkApplicationsControllerTest {
     }
 
     @Test
-    void givenNewStatusAndApplicationId_whenUpdate_thenReturnWorkApplication() throws Exception {
+    void givenNewStatusAndApplicationId_whenUpdate_thenReturnApplication() throws Exception {
         //given
         String applicationId = "1234";
         String status = "IN_PROGRESS";
@@ -112,7 +112,7 @@ class WorkApplicationsControllerTest {
         // Given
         String applicationId = "1234";
         String jobUrl = "{\"url\":\"https://job.pl\"}";
-        WorkSpecification spec = WorkSpecification.builder()
+        Specification spec = Specification.builder()
                 .id("12345")
                 .companyName("company")
                 .requirements(List.of("req1", "req2"))
