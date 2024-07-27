@@ -6,7 +6,7 @@ import io.github.mateuszuran.sisyphus_app.dto.WorkSpecificationDTO;
 import io.github.mateuszuran.sisyphus_app.model.WorkSpecification;
 import io.github.mateuszuran.sisyphus_app.repository.WorkSpecificationRepository;
 import io.github.mateuszuran.sisyphus_app.service.WorkApplicationsServiceImpl;
-import io.github.mateuszuran.sisyphus_app.service.WorkSpecificationsImpl;
+import io.github.mateuszuran.sisyphus_app.service.WorkSpecificationsServiceImpl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 @AutoConfigureMockMvc
 public class WorkSpecificationIntegrationTest {
     private static MockWebServer mockBackEnd;
-    private WorkSpecificationsImpl workSpecificationsImpl;
+    private WorkSpecificationsServiceImpl workSpecificationsServiceImpl;
     private WorkApplicationsServiceImpl appService;
     private WorkSpecificationRepository repository;
     private ObjectMapper objectMapper;
@@ -58,7 +58,7 @@ public class WorkSpecificationIntegrationTest {
         appService = mock(WorkApplicationsServiceImpl.class);
         repository = mock(WorkSpecificationRepository.class);
 
-        workSpecificationsImpl = new WorkSpecificationsImpl(repository, webClientBuilder, appService);
+        workSpecificationsServiceImpl = new WorkSpecificationsServiceImpl(repository, webClientBuilder, appService);
         objectMapper = new ObjectMapper();
     }
 
@@ -87,7 +87,7 @@ public class WorkSpecificationIntegrationTest {
         when(appService.updateWorkApplicationSpecificationsReactive(anyString(), any())).thenReturn(Mono.empty());
 
         // Call the method
-        Mono<WorkSpecification> result = workSpecificationsImpl.saveSpecification("fake_job_url", "1234");
+        Mono<WorkSpecification> result = workSpecificationsServiceImpl.saveSpecification("fake_job_url", "1234");
 
         // Verify the result
         StepVerifier.create(result)
@@ -102,7 +102,7 @@ public class WorkSpecificationIntegrationTest {
                 .addHeader("Content-Type", "application/json"));
 
         // Call the method
-        Mono<WorkSpecification> result = workSpecificationsImpl.saveSpecification("testUrl", "testAppId");
+        Mono<WorkSpecification> result = workSpecificationsServiceImpl.saveSpecification("testUrl", "testAppId");
 
         // Verify error
         StepVerifier.create(result)
@@ -125,7 +125,7 @@ public class WorkSpecificationIntegrationTest {
         when(appService.checkWorkSpecInsideApplicationReactive(anyString(), any())).thenReturn(Mono.just(true));
 
         // Call the method
-        Mono<WorkSpecification> result = workSpecificationsImpl.saveSpecification("testUrl", "testAppId");
+        Mono<WorkSpecification> result = workSpecificationsServiceImpl.saveSpecification("testUrl", "testAppId");
 
         // Verify error
         StepVerifier.create(result)
@@ -141,7 +141,7 @@ public class WorkSpecificationIntegrationTest {
                 .addHeader("Content-Type", "application/json"));
 
         // Call the method
-        Mono<WorkSpecification> result = workSpecificationsImpl.saveSpecification("testUrl", "testAppId");
+        Mono<WorkSpecification> result = workSpecificationsServiceImpl.saveSpecification("testUrl", "testAppId");
 
         // Verify error
         StepVerifier.create(result)

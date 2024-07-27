@@ -11,7 +11,7 @@ CORS(app, origins=frontend_url)
 
 @app.route('/scrape', methods=['POST'])
 def scrape_endpoint():
-    url = request.json.get('url')
+    url = request.data.decode('utf-8')
     if not url:
         return jsonify({'error': 'URL is required'}), 400
 

@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WorkSpecificationsImpl implements WorkSpecificationsService {
+public class WorkSpecificationsServiceImpl implements WorkSpecificationsService {
     private final WorkSpecificationRepository repository;
     private final WebClient.Builder webClient;
     private final WorkApplicationsServiceImpl appService;
