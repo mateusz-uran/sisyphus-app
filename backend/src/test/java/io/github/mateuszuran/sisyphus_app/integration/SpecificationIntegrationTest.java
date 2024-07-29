@@ -3,6 +3,7 @@ package io.github.mateuszuran.sisyphus_app.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.mateuszuran.sisyphus_app.SisyphusAppApplication;
 import io.github.mateuszuran.sisyphus_app.dto.SpecificationDTO;
+import io.github.mateuszuran.sisyphus_app.exception.ScraperException;
 import io.github.mateuszuran.sisyphus_app.model.Specification;
 import io.github.mateuszuran.sisyphus_app.repository.SpecificationRepository;
 import io.github.mateuszuran.sisyphus_app.service.ApplicationsServiceImpl;
@@ -145,7 +146,7 @@ public class SpecificationIntegrationTest {
 
         // Verify error
         StepVerifier.create(result)
-                .expectErrorMatches(error -> error instanceof IllegalStateException && error.getMessage().equals("Unexpected response type: Invalid JSON"))
+                .expectErrorMatches(error -> error instanceof ScraperException && error.getMessage().equals("Unexpected response type: Invalid JSON"))
                 .verify();
     }
 }
