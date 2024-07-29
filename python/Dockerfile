@@ -1,7 +1,7 @@
 # python/Dockerfile
 
 # Use the official Python image from the Docker Hub
-FROM python:3.9-slim
+FROM python:3.10.14-slim-bullseye
 
 # Set environment variables to avoid Python buffering and to ensure that the output is sent straight to the terminal
 ENV PYTHONUNBUFFERED=1
