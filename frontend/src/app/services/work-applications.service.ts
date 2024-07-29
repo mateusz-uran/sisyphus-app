@@ -13,7 +13,6 @@ import { environment } from '../../environments/environment';
 })
 export class WorkApplicationsService {
   private apiUrl = environment.apiUrl + '/applications';
-  private scraperUrl = environment.scraperUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -42,11 +41,11 @@ export class WorkApplicationsService {
   }
 
   scrapWorkApplicationSpecification(
-    pageType: string,
-    url: string
+    url: string,
+    applicationId: string
   ): Observable<WorkSpecificationDTO> {
     return this.http.post<WorkSpecificationDTO>(
-      `${this.scraperUrl}/${pageType}`,
+      `${this.apiUrl}/spec/${applicationId}`,
       { url }
     );
   }

@@ -8,12 +8,13 @@ import {
   ValidatorFn,
   AbstractControl,
 } from '@angular/forms';
-import { map, switchMap } from 'rxjs';
+import { catchError, map, of, switchMap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { WorkApplicationsService } from '../services/work-applications.service';
 import {
   WorkApplication,
   WorkApplicationDTO,
+  WorkSpecificationDTO,
 } from '../interfaces/work-application';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -98,6 +99,15 @@ export class WorkAppFormComponent {
     });
   }
 
+  private isSpecificationEmpty(specification: WorkSpecificationDTO): boolean {
+    return (
+      !specification.companyName &&
+      (!specification.requirements ||
+        specification.requirements.length === 0) &&
+      (!specification.technologies || specification.technologies.length === 0)
+    );
+  }
+
   removeSingleUrl(url: string) {
     this.workUrls.update((workUrls) => {
       const index = workUrls.indexOf(url);
@@ -146,7 +156,24 @@ export class WorkAppFormComponent {
         )
       )
       .subscribe((appList: WorkApplication[]) => {
-        this.updateWorkAppList.emit(appList);
+        const updatedAppList = appList.map((app) => {
+          if (
+            !app.specification ||
+            this.isSpecificationEmpty(app.specification)
+          ) {
+            this.workApplicationService
+              .scrapWorkApplicationSpecification(app.workUrl, app.id)
+              .subscribe((response) => {
+                if (response) {
+                  app.specification = response;
+                  this.updateWorkAppList.emit(appList);
+                }
+              });
+          }
+          return app;
+        });
+
+        this.updateWorkAppList.emit(updatedAppList);
         this.workUrls.set([]);
       });
   }

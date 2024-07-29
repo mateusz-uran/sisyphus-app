@@ -16,6 +16,7 @@ section {
     background-color: getThemeColor(40, secondary);
     padding: 15px;
     border-radius: 5px;
+    flex-wrap: wrap;
 
     .h-font-small {
       font-size: $font-micro;
@@ -78,6 +79,13 @@ section {
       button {
         margin: 0 0.5rem;
       }
+    }
+
+    .spec {
+      flex-basis: 100%;
+      padding: 20px;
+      border-radius: 5px;
+      margin-top: 10px;
     }
   }
 }

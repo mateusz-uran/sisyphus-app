@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { WorkApplicationsService } from '../services/work-applications.service';
+import { WorkSpecComponent } from '../work-spec/work-spec.component';
 
 @Component({
   selector: 'app-work-app-item',
@@ -16,6 +17,7 @@ import { WorkApplicationsService } from '../services/work-applications.service';
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
+    WorkSpecComponent,
   ],
   template: `
     <section *ngIf="app() as app">
@@ -29,12 +31,6 @@ import { WorkApplicationsService } from '../services/work-applications.service';
             {{ app.workUrl }}
           </p>
           <a mat-stroked-button [href]="app.workUrl">Otwórz</a>
-          <button
-            (click)="gatherJobSpecifications('nofluffjobs', app.workUrl)"
-            mat-button
-          >
-            Zaktualizuj
-          </button>
         </div>
         <div class="application-date">
           <p class="h-font-small">Data aplikowania</p>
@@ -68,6 +64,9 @@ import { WorkApplicationsService } from '../services/work-applications.service';
             <mat-icon>delete</mat-icon>
           </button>
         </div>
+        <div class="spec">
+          <app-work-spec [specifications]="app.specification"></app-work-spec>
+        </div>
       </div>
     </section>
   `,
@@ -79,6 +78,7 @@ export class WorkAppItemComponent {
   );
 
   app = input<WorkApplication>();
+
   workStatus = input<string[]>();
   isScreenSmall = input<boolean>();
 
@@ -105,21 +105,5 @@ export class WorkAppItemComponent {
 
   deleteWork(appId: string) {
     this.delete.emit(appId);
-  }
-
-  gatherJobSpecifications(pageType: string, url: string) {
-    console.log(
-      'Call spring boot app with pageType: ' +
-        pageType +
-        ' and workUrl: ' +
-        url +
-        ' and receive work specification as a response'
-    );
-
-    // this.workApplicationService
-    //   .scrapWorkApplicationSpecification(pageType, url)
-    //   .subscribe((response) => {
-    //     console.log(response);
-    //   });
   }
 }

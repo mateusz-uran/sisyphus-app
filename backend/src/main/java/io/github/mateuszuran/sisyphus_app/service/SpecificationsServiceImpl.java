@@ -3,13 +3,16 @@ package io.github.mateuszuran.sisyphus_app.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.mateuszuran.sisyphus_app.dto.SpecificationDTO;
+import io.github.mateuszuran.sisyphus_app.exception.ScraperException;
 import io.github.mateuszuran.sisyphus_app.model.Specification;
 import io.github.mateuszuran.sisyphus_app.repository.SpecificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -35,14 +38,18 @@ public class SpecificationsServiceImpl implements SpecificationsService {
                         SpecificationDTO workSpec = new ObjectMapper().readValue(response, SpecificationDTO.class);
                         return Mono.just(workSpec);
                     } catch (JsonProcessingException e) {
-                        // TODO: create custom exception
-                        return Mono.error(new IllegalStateException("Unexpected response type: " + response));
+                        return Mono.error(new ScraperException("Unexpected response type: " + response, HttpStatus.BAD_REQUEST));
                     }
+                })
+                .onErrorMap(throwable -> {
+                    if (throwable instanceof WebClientRequestException) {
+                        return new ScraperException("Failed to connect to the Scraper API", HttpStatus.SERVICE_UNAVAILABLE);
+                    }
+                    return throwable;
                 });
     }
 
 
-    // TODO: replace runtime with custom exceptions
     @Override
     public Mono<Specification> saveSpecification(String url, String appId) {
         return scrapeJob(url)
@@ -66,7 +73,12 @@ public class SpecificationsServiceImpl implements SpecificationsService {
                             });
 
                 })
-                .doOnError(error -> log.error("Scraper API call failed: {}", error.getMessage()));
+                .doOnError(error -> {
+                    log.error("Scraper API call failed: {}", error.getMessage());
+                    if (!(error instanceof ScraperException)) {
+                        throw new ScraperException(error.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                    }
+                });
     }
 
     private boolean checkResponse(SpecificationDTO response) {

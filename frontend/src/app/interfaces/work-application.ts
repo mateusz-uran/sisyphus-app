@@ -3,6 +3,7 @@ export interface WorkApplication {
   workUrl: string;
   appliedDate: string;
   status: string;
+  specification: WorkSpecificationDTO;
 }
 
 export interface WorkApplicationDTO {
@@ -11,6 +12,6 @@ export interface WorkApplicationDTO {
 
 export interface WorkSpecificationDTO {
   companyName: string;
-  requirementsExpected: string[];
-  technologiesExpected: string[];
+  requirements: string[];
+  technologies: string[];
 }
