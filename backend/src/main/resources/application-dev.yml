@@ -11,3 +11,6 @@ server:
 
   servlet:
     context-path: /api/v1/
+
+scraper:
+  api: http://127.0.0.1:5858/scrape

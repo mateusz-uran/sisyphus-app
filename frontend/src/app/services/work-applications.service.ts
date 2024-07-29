@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import {
   WorkApplication,
   WorkApplicationDTO,
+  WorkSpecificationDTO,
 } from '../interfaces/work-application';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -37,5 +38,15 @@ export class WorkApplicationsService {
 
   deleteWorkApplication(applicationId: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/delete/${applicationId}`);
+  }
+
+  scrapWorkApplicationSpecification(
+    url: string,
+    applicationId: string
+  ): Observable<WorkSpecificationDTO> {
+    return this.http.post<WorkSpecificationDTO>(
+      `${this.apiUrl}/spec/${applicationId}`,
+      { url }
+    );
   }
 }

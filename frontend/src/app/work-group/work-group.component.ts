@@ -61,8 +61,6 @@ export class WorkGroupComponent {
   @Input() workGroup!: TransformedWorkGroup;
   workGroupService: WorkGroupService = inject(WorkGroupService);
 
-  constructor() {}
-
   ngOnInit(): void {}
 
   openPdfInNewTab(cvBlob: Blob): void {

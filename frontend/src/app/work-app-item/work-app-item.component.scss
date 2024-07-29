@@ -16,6 +16,7 @@ section {
     background-color: getThemeColor(40, secondary);
     padding: 15px;
     border-radius: 5px;
+    flex-wrap: wrap;
 
     .h-font-small {
       font-size: $font-micro;
@@ -23,6 +24,8 @@ section {
 
     .link-wrapper {
       text-align: center;
+      display: flex;
+      flex-direction: column;
 
       p {
         white-space: nowrap;
@@ -35,13 +38,18 @@ section {
       a {
         width: 100px;
       }
+
+      button,
+      p {
+        margin: 5px 0;
+      }
     }
 
     .application-date {
       display: flex;
       flex-direction: column;
       text-align: center;
-      justify-content: space-between;
+      justify-content: space-around;
 
       p {
         margin: 0;
@@ -55,6 +63,9 @@ section {
 
     .status-wrapper {
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
 
       p {
         color: $head_p;
@@ -68,6 +79,13 @@ section {
       button {
         margin: 0 0.5rem;
       }
+    }
+
+    .spec {
+      flex-basis: 100%;
+      padding: 20px;
+      border-radius: 5px;
+      margin-top: 10px;
     }
   }
 }

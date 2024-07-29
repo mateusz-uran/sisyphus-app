@@ -14,16 +14,33 @@ services:
   sisyphus-api:
     container_name: sisyphus-api
     image: dev/sisyphus-api:1.0.4
+    build:
+      context: backend
+      dockerfile: Dockerfile
+      args:
+        APP_VERSION: 1.1.4
+        SCRAPE: http://sisyphus-scraper:5858/scrape
     ports:
-      - '8088:8088'
+      - '8080:8080'
     depends_on:
       - mongo_db
   sisyphus-frontend:
     container_name: sisyphus-ui
     image: dev/sisyphus-ui:1.0.3
+    build:
+      context: frontend
+      dockerfile: Dockerfile
     ports:
       - '9090:80'
     depends_on:
       - sisyphus-api
+  sisyphus-scraper:
+    container_name: sisyphus-scraper
+    image: dev/sisyphus-scraper:1.0.0
+    build:
+      context: python
+      dockerfile: Dockerfile
+    ports:
+      - '5858:5858'
 volumes:
   db:

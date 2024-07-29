@@ -27,5 +27,5 @@ public class WorkGroup {
     private boolean isHired;
 
     @DocumentReference(lazy = true)
-    private List<WorkApplications> workApplications;
+    private List<Applications> applications;
 }

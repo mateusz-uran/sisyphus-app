@@ -1,0 +1,25 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixin.scss";
+
+section {
+  h5 {
+    color: getThemeColor(90, secondary);
+    margin-bottom: 5px;
+    margin-left: 3px;
+  }
+
+  mat-expansion-panel-header {
+    mat-panel-description {
+      ul {
+        list-style: none;
+      }
+    }
+  }
+
+  .empty {
+    background-color: getThemeColor(20, secondary);
+    padding: 10px;
+    border-radius: 10px;
+    color: #fff;
+  }
+}

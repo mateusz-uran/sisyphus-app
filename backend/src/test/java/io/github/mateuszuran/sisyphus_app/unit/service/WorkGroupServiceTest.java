@@ -1,9 +1,9 @@
 package io.github.mateuszuran.sisyphus_app.unit.service;
 
 import io.github.mateuszuran.sisyphus_app.model.ApplicationStatus;
-import io.github.mateuszuran.sisyphus_app.model.WorkApplications;
+import io.github.mateuszuran.sisyphus_app.model.Applications;
 import io.github.mateuszuran.sisyphus_app.model.WorkGroup;
-import io.github.mateuszuran.sisyphus_app.repository.WorkGroupRepository;
+import io.github.mateuszuran.sisyphus_app.repository.GroupRepository;
 import io.github.mateuszuran.sisyphus_app.service.WorkGroupServiceImpl;
 import io.github.mateuszuran.sisyphus_app.util.TimeUtil;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ public class WorkGroupServiceTest {
     @Mock
     TimeUtil util;
     @Mock
-    WorkGroupRepository repository;
+    GroupRepository repository;
     @InjectMocks
     WorkGroupServiceImpl serviceImpl;
 
@@ -81,15 +81,15 @@ public class WorkGroupServiceTest {
     }
 
     @Test
-    public void givenWorkApplicationsAndWorkGroupId_whenUpdate_thenAddWorkGroupApplications() {
+    public void givenApplicationsAndWorkGroupId_whenUpdate_thenAddWorkGroupToApplications() {
         //given
         String workGroupId = "123";
-        WorkGroup group = WorkGroup.builder().id(workGroupId).workApplications(new ArrayList<>()).build();
+        WorkGroup group = WorkGroup.builder().id(workGroupId).applications(new ArrayList<>()).build();
         when(repository.findById(workGroupId)).thenReturn(Optional.of(group));
 
-        WorkApplications application1 = WorkApplications.builder().workUrl("work1").build();
-        WorkApplications application2 = WorkApplications.builder().workUrl("work2").build();
-        WorkApplications application3 = WorkApplications.builder().workUrl("work3").build();
+        Applications application1 = Applications.builder().workUrl("work1").build();
+        Applications application2 = Applications.builder().workUrl("work2").build();
+        Applications application3 = Applications.builder().workUrl("work3").build();
         var applicationsList = List.of(application1, application2, application3);
 
         int applicationSize = applicationsList.size();
@@ -97,17 +97,17 @@ public class WorkGroupServiceTest {
                 .id(workGroupId)
                 .sent(applicationSize)
                 .inProgress(0)
-                .workApplications(applicationsList).build();
+                .applications(applicationsList).build();
         when(repository.save(group)).thenReturn(expectedGroup);
 
         //when
-        var updatedGroup = serviceImpl.updateWorkGroupWithWorkApplications(applicationsList, workGroupId);
+        var updatedGroup = serviceImpl.updateWorkGroupWithApplications(applicationsList, workGroupId);
 
         //then
-        assertNotNull(updatedGroup.getWorkApplications());
-        assertThat(updatedGroup.getWorkApplications())
+        assertNotNull(updatedGroup.getApplications());
+        assertThat(updatedGroup.getApplications())
                 .hasSize(3)
-                .extracting(WorkApplications::getWorkUrl)
+                .extracting(Applications::getWorkUrl)
                 .containsExactlyInAnyOrder("work1", "work2", "work3");
         assertThat(updatedGroup.getSent()).isEqualTo(applicationsList.size());
         assertThat(updatedGroup.getSent()).isEqualTo(3);
@@ -116,12 +116,12 @@ public class WorkGroupServiceTest {
     }
 
     @Test
-    public void givenWorkApplicationEmptyList_whenUpdate_thenThrow() {
+    public void givenApplicationEmptyList_whenUpdate_thenThrow() {
         //given
         String workGroupId = "123";
 
         //when + then
-        assertThrows(IllegalStateException.class, () -> serviceImpl.updateWorkGroupWithWorkApplications(null, workGroupId));
+        assertThrows(IllegalStateException.class, () -> serviceImpl.updateWorkGroupWithApplications(null, workGroupId));
         verify(repository, never()).findById(workGroupId);
         verify(repository, never()).save(any());
 
@@ -163,37 +163,37 @@ public class WorkGroupServiceTest {
     public void givenWorkGroupId_whenGetAllApplications_thenReturnListOf() {
         //given
         String workGroupId = "123";
-        WorkGroup group = WorkGroup.builder().id(workGroupId).workApplications(new ArrayList<>()).build();
+        WorkGroup group = WorkGroup.builder().id(workGroupId).applications(new ArrayList<>()).build();
 
-        WorkApplications application1 = WorkApplications.builder().workUrl("work1").build();
-        WorkApplications application2 = WorkApplications.builder().workUrl("work2").build();
-        WorkApplications application3 = WorkApplications.builder().workUrl("work3").build();
+        Applications application1 = Applications.builder().workUrl("work1").build();
+        Applications application2 = Applications.builder().workUrl("work2").build();
+        Applications application3 = Applications.builder().workUrl("work3").build();
         var applicationsList = List.of(application1, application2, application3);
-        group.getWorkApplications().addAll(applicationsList);
+        group.getApplications().addAll(applicationsList);
         when(repository.findById(workGroupId)).thenReturn(Optional.of(group));
 
         //when
-        var workApplications = serviceImpl.getAllWorkApplicationsFromWorkGroup(workGroupId);
+        var workApplications = serviceImpl.getAllApplicationsFromWorkGroup(workGroupId);
 
         //then
         assertThat(workApplications)
                 .hasSize(applicationsList.size())
-                .extracting(WorkApplications::getWorkUrl)
+                .extracting(Applications::getWorkUrl)
                 .containsExactly("work1", "work2", "work3");
     }
 
     @Test
-    void givenWorkApplicationAndStatus_whenChangeDeniedToOther_thenDecrementCounter() {
+    void givenApplicationAndStatus_whenChangeDeniedToOther_thenDecrementCounter() {
         //given
-        WorkApplications application = WorkApplications.builder().id("1234").status(ApplicationStatus.REJECTED).build();
-        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).workApplications(List.of(application)).build();
+        Applications application = Applications.builder().id("1234").status(ApplicationStatus.REJECTED).build();
+        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).applications(List.of(application)).build();
 
         when(repository.findAll()).thenReturn(List.of(group));
 
         ArgumentCaptor<WorkGroup> groupCaptor = ArgumentCaptor.forClass(WorkGroup.class);
 
         // when
-        serviceImpl.updateGroupWhenWorkUpdate(application, ApplicationStatus.IN_PROGRESS.name(), application.getStatus().name());
+        serviceImpl.updateGroupWhenApplicationUpdate(application, ApplicationStatus.IN_PROGRESS.name(), application.getStatus().name());
 
         // then
         verify(repository).findAll();
@@ -206,17 +206,17 @@ public class WorkGroupServiceTest {
     }
 
     @Test
-    void givenWorkApplicationAndStatus_whenChangeOtherToDenied_thenIncrementCounter() {
+    void givenApplicationAndStatus_whenChangeOtherToDenied_thenIncrementCounter() {
         //given
-        WorkApplications application = WorkApplications.builder().id("1234").status(ApplicationStatus.SENT).build();
-        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).workApplications(List.of(application)).build();
+        Applications application = Applications.builder().id("1234").status(ApplicationStatus.SENT).build();
+        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).applications(List.of(application)).build();
 
         when(repository.findAll()).thenReturn(List.of(group));
 
         ArgumentCaptor<WorkGroup> groupCaptor = ArgumentCaptor.forClass(WorkGroup.class);
 
         // when
-        serviceImpl.updateGroupWhenWorkUpdate(application, ApplicationStatus.REJECTED.name(), application.getStatus().name());
+        serviceImpl.updateGroupWhenApplicationUpdate(application, ApplicationStatus.REJECTED.name(), application.getStatus().name());
 
         // then
         verify(repository).findAll();
@@ -229,26 +229,26 @@ public class WorkGroupServiceTest {
     }
 
     @Test
-    void givenWorkApplicationAndStatus_whenWorkGroupNotFound_thenThrowException() {
+    void givenApplicationAndStatus_whenWorkGroupNotFound_thenThrowException() {
         //given
-        WorkApplications application = WorkApplications.builder().status(ApplicationStatus.SENT).build();
+        Applications application = Applications.builder().status(ApplicationStatus.SENT).build();
 
         //when + then
-        assertThrows(IllegalArgumentException.class, () -> serviceImpl.updateGroupWhenWorkUpdate(application, ApplicationStatus.REJECTED.name(), application.getStatus().name()));
+        assertThrows(IllegalArgumentException.class, () -> serviceImpl.updateGroupWhenApplicationUpdate(application, ApplicationStatus.REJECTED.name(), application.getStatus().name()));
         verify(repository, never()).save(any());
     }
 
     @Test
-    void givenWorkApplication_whenWorkStatusIsNotDeniedAndDelete_thenUpdateWorkGroupCounters() {
+    void givenApplication_whenWorkStatusIsNotDeniedAndDelete_thenUpdateWorkGroupCounters() {
         //given
-        WorkApplications application = WorkApplications.builder().id("1234").status(ApplicationStatus.SENT).build();
-        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).workApplications(List.of(application)).build();
+        Applications application = Applications.builder().id("1234").status(ApplicationStatus.SENT).build();
+        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).applications(List.of(application)).build();
 
         when(repository.findAll()).thenReturn(List.of(group));
 
         ArgumentCaptor<WorkGroup> groupCaptor = ArgumentCaptor.forClass(WorkGroup.class);
         //when
-        serviceImpl.updateGroupWhenWorkDelete(application);
+        serviceImpl.updateGroupWhenApplicationDelete(application);
 
         //then
         verify(repository).findAll();
@@ -261,16 +261,16 @@ public class WorkGroupServiceTest {
     }
 
     @Test
-    void givenWorkApplication_whenWorkStatusDeniedAndDelete_thenUpdateWorkGroupOneCounter() {
+    void givenApplication_whenWorkStatusDeniedAndDelete_thenUpdateWorkGroupOneCounter() {
         //given
-        WorkApplications application = WorkApplications.builder().id("1234").status(ApplicationStatus.REJECTED).build();
-        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).workApplications(List.of(application)).build();
+        Applications application = Applications.builder().id("1234").status(ApplicationStatus.REJECTED).build();
+        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).applications(List.of(application)).build();
 
         when(repository.findAll()).thenReturn(List.of(group));
 
         ArgumentCaptor<WorkGroup> groupCaptor = ArgumentCaptor.forClass(WorkGroup.class);
         //when
-        serviceImpl.updateGroupWhenWorkDelete(application);
+        serviceImpl.updateGroupWhenApplicationDelete(application);
 
         //then
         verify(repository).findAll();
@@ -282,16 +282,16 @@ public class WorkGroupServiceTest {
     }
 
     @Test
-    void givenWorkApplication_whenStatusIsHired_thenToggleWorkGroup() {
+    void givenApplication_whenStatusIsHired_thenToggleWorkGroup() {
         //given
-        WorkApplications application = WorkApplications.builder().id("1234").status(ApplicationStatus.HIRED).build();
-        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).workApplications(List.of(application)).build();
+        Applications application = Applications.builder().id("1234").status(ApplicationStatus.HIRED).build();
+        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).applications(List.of(application)).build();
 
         when(repository.findAll()).thenReturn(List.of(group));
 
         ArgumentCaptor<WorkGroup> groupCaptor = ArgumentCaptor.forClass(WorkGroup.class);
         //when
-        serviceImpl.updateGroupWhenWorkUpdate(application, "hired", "in_progress");
+        serviceImpl.updateGroupWhenApplicationUpdate(application, "hired", "in_progress");
 
         //then
         verify(repository).findAll();

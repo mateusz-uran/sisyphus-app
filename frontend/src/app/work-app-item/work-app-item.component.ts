@@ -1,10 +1,12 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorkApplication } from '../interfaces/work-application';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { WorkApplicationsService } from '../services/work-applications.service';
+import { WorkSpecComponent } from '../work-spec/work-spec.component';
 
 @Component({
   selector: 'app-work-app-item',
@@ -15,6 +17,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
+    WorkSpecComponent,
   ],
   template: `
     <section *ngIf="app() as app">
@@ -61,13 +64,21 @@ import { MatTooltipModule } from '@angular/material/tooltip';
             <mat-icon>delete</mat-icon>
           </button>
         </div>
+        <div class="spec">
+          <app-work-spec [specifications]="app.specification"></app-work-spec>
+        </div>
       </div>
     </section>
   `,
   styleUrl: './work-app-item.component.scss',
 })
 export class WorkAppItemComponent {
+  workApplicationService: WorkApplicationsService = inject(
+    WorkApplicationsService
+  );
+
   app = input<WorkApplication>();
+
   workStatus = input<string[]>();
   isScreenSmall = input<boolean>();
 
