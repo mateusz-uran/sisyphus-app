@@ -19,7 +19,8 @@ services:
       dockerfile: Dockerfile
       args:
         APP_VERSION: 1.1.4
-        SCRAPE: http://sisyphus-scraper:5858/scrape
+    environment:
+      SCRAPER_API: http://sisyphus-scraper:5858/scrape
     ports:
       - '8080:8080'
     depends_on:
