@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://mateuszuran:password@localhost:27017/sisyphus-db?authSource=admin
+      uri: mongodb://mateuszuran:local123@localhost:28018/sisyphus-db?authSource=admin
 application:
   cors:
     origins: http://localhost:4200, http://localhost:9090
@@ -11,3 +11,6 @@ server:
 
   servlet:
     context-path: /api/v1/
+
+scraper:
+  api: http://127.0.0.1:5858/scrape

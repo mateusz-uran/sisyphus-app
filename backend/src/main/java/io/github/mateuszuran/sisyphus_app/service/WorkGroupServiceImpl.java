@@ -1,9 +1,9 @@
 package io.github.mateuszuran.sisyphus_app.service;
 
 import io.github.mateuszuran.sisyphus_app.dto.WorkGroupDTO;
-import io.github.mateuszuran.sisyphus_app.model.WorkApplications;
+import io.github.mateuszuran.sisyphus_app.model.Applications;
 import io.github.mateuszuran.sisyphus_app.model.WorkGroup;
-import io.github.mateuszuran.sisyphus_app.repository.WorkGroupRepository;
+import io.github.mateuszuran.sisyphus_app.repository.GroupRepository;
 import io.github.mateuszuran.sisyphus_app.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class WorkGroupServiceImpl implements WorkGroupService {
-    private final WorkGroupRepository repository;
+    private final GroupRepository repository;
     private final TimeUtil utility;
 
     @Override
@@ -49,13 +49,12 @@ public class WorkGroupServiceImpl implements WorkGroupService {
                 .orElseThrow(() -> new RuntimeException("Work group with given ID not found"));
     }
 
-    @Override
-    public WorkGroup updateWorkGroupWithWorkApplications(List<WorkApplications> applications, String workGroupId) {
+    public WorkGroup updateWorkGroupWithApplications(List<Applications> applications, String workGroupId) {
         if (applications == null) {
             throw new IllegalStateException("Applications list is empty");
         }
         WorkGroup groupToUpdate = getWorkGroup(workGroupId);
-        groupToUpdate.getWorkApplications().addAll(applications);
+        groupToUpdate.getApplications().addAll(applications);
         var sendValue = groupToUpdate.getSent();
 
         if (sendValue != 0) {
@@ -80,14 +79,15 @@ public class WorkGroupServiceImpl implements WorkGroupService {
     }
 
     @Override
-    public List<WorkApplications> getAllWorkApplicationsFromWorkGroup(String workGroupId) {
+    public List<Applications> getAllApplicationsFromWorkGroup(String workGroupId) {
         var groupToFind = getWorkGroup(workGroupId);
-        return groupToFind.getWorkApplications();
+        return groupToFind.getApplications();
     }
 
+
     @Override
-    public void updateGroupWhenWorkUpdate(WorkApplications work, String newStatus, String oldStatus) {
-        var group = findGroupByGivenWorkApplication(work);
+    public void updateGroupWhenApplicationUpdate(Applications work, String newStatus, String oldStatus) {
+        var group = findGroupByGivenApplication(work);
 
         adjustOldStatusCount(oldStatus, group);
         adjustNewStatusCount(newStatus, group);
@@ -96,8 +96,8 @@ public class WorkGroupServiceImpl implements WorkGroupService {
     }
 
     @Override
-    public void updateGroupWhenWorkDelete(WorkApplications work) {
-        var group = findGroupByGivenWorkApplication(work);
+    public void updateGroupWhenApplicationDelete(Applications work) {
+        var group = findGroupByGivenApplication(work);
 
         adjustOldStatusCount(work.getStatus().name(), group);
 
@@ -137,11 +137,11 @@ public class WorkGroupServiceImpl implements WorkGroupService {
         }
     }
 
-    private WorkGroup findGroupByGivenWorkApplication(WorkApplications work) {
+    private WorkGroup findGroupByGivenApplication(Applications work) {
         return repository.findAll()
                 .stream()
-                .filter(workGroup -> workGroup.getWorkApplications() != null)
-                .filter(workGroup -> workGroup.getWorkApplications()
+                .filter(workGroup -> workGroup.getApplications() != null)
+                .filter(workGroup -> workGroup.getApplications()
                         .stream()
                         .anyMatch(workApplications -> workApplications.getId().equals(work.getId())))
                 .findFirst()

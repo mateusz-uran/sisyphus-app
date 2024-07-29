@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.mateuszuran.sisyphus_app.AbstractIntegrationTest;
 import io.github.mateuszuran.sisyphus_app.SisyphusAppApplication;
 import io.github.mateuszuran.sisyphus_app.model.WorkGroup;
-import io.github.mateuszuran.sisyphus_app.repository.WorkGroupRepository;
+import io.github.mateuszuran.sisyphus_app.repository.GroupRepository;
 import org.bson.types.Binary;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +39,7 @@ public class WorkGroupIntegrationTest extends AbstractIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private WorkGroupRepository repository;
+    private GroupRepository repository;
 
     @BeforeEach
     public void setUp() throws Exception {

@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/group")
 @RequiredArgsConstructor
-public class WorkGroupController {
+public class GroupController {
     private final WorkGroupServiceImpl service;
 
     @GetMapping("/all")
