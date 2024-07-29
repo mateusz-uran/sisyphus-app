@@ -27,7 +27,6 @@ public class SpecificationsServiceImpl implements SpecificationsService {
     private String scrapeApiUrl;
 
     private Mono<SpecificationDTO> scrapeJob(String url) {
-        log.info("Scraper: " + scrapeApiUrl);
         return webClient.build().post()
                 .uri(scrapeApiUrl)
                 .header("Content-Type", "application/json")
