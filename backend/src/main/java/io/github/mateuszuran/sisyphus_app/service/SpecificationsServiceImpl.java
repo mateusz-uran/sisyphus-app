@@ -82,8 +82,8 @@ public class SpecificationsServiceImpl implements SpecificationsService {
     }
 
     private boolean checkResponse(SpecificationDTO response) {
-        return (response.company_name() == null || response.company_name().isEmpty()) ||
-                (response.requirements_expected() == null || response.requirements_expected().isEmpty()) ||
+        return (response.company_name() == null || response.company_name().isEmpty()) &&
+                (response.requirements_expected() == null || response.requirements_expected().isEmpty()) &&
                 (response.technologies_expected() == null || response.technologies_expected().isEmpty());
     }
 

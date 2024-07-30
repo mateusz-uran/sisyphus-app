@@ -21,7 +21,8 @@ COPY . /app/
 # Expose the port that the application will run on
 EXPOSE 5858
 
-# Set the environment variable for the frontend URL
+
+# Set the environment variable for the frontend URL (optional default value can be overridden when running the container).
 ENV FRONTEND_URL=http://localhost:9090
 
 # Specify the command to run your application

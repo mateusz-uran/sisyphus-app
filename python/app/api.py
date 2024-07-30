@@ -16,7 +16,7 @@ def scrape_endpoint():
         return jsonify({'error': 'URL is required'}), 400
 
     try:
-        return jsonify(handle_scrapers(url))
+        return handle_scrapers(url)
     except Exception as e:
         return jsonify(({'error': str(e)})), 500
 

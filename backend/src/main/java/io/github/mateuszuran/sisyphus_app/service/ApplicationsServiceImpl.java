@@ -5,9 +5,11 @@ import io.github.mateuszuran.sisyphus_app.model.ApplicationStatus;
 import io.github.mateuszuran.sisyphus_app.model.Applications;
 import io.github.mateuszuran.sisyphus_app.model.Specification;
 import io.github.mateuszuran.sisyphus_app.repository.ApplicationsRepository;
+import io.github.mateuszuran.sisyphus_app.repository.SpecificationRepository;
 import io.github.mateuszuran.sisyphus_app.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -20,6 +22,7 @@ import java.util.Objects;
 public class ApplicationsServiceImpl implements ApplicationsService {
 
     private final ApplicationsRepository repository;
+    private final SpecificationRepository specRepository;
     private final WorkGroupServiceImpl groupServiceImpl;
     private final TimeUtil timeUtil;
 
@@ -47,6 +50,7 @@ public class ApplicationsServiceImpl implements ApplicationsService {
     public void deleteApplication(String applicationId) {
         var applicationToDelete = getSingleApplication(applicationId);
         groupServiceImpl.updateGroupWhenApplicationDelete(applicationToDelete);
+        specRepository.deleteById(applicationToDelete.getSpecification().getId());
         repository.delete(applicationToDelete);
     }
 
