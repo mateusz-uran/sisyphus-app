@@ -57,17 +57,10 @@ class ApplicationsControllerTest {
     void givenWorkGroupId_whenGetAllApplications_thenReturnListOfApplications() throws Exception {
         //given
         String workGroupId = "1234";
-<<<<<<< HEAD:backend/src/test/java/io/github/mateuszuran/sisyphus_app/unit/controller/WorkApplicationsControllerTest.java
-        WorkApplications applications1 = WorkApplications.builder().workUrl("url1").status(ApplicationStatus.SENT).build();
-        WorkApplications applications2 = WorkApplications.builder().workUrl("url2").status(ApplicationStatus.REJECTED).build();
-        WorkApplications applications3 = WorkApplications.builder().workUrl("url3").status(ApplicationStatus.IN_PROGRESS).build();
-        List<WorkApplications> expectedList = List.of(applications1, applications2, applications3);
-=======
         Applications applications1 = Applications.builder().workUrl("url1").status(ApplicationStatus.SENT).build();
         Applications applications2 = Applications.builder().workUrl("url2").status(ApplicationStatus.REJECTED).build();
         Applications applications3 = Applications.builder().workUrl("url3").status(ApplicationStatus.IN_PROGRESS).build();
         List<Applications> expectedList = List.of(applications1, applications2, applications3);
->>>>>>> dev:backend/src/test/java/io/github/mateuszuran/sisyphus_app/unit/controller/ApplicationsControllerTest.java
 
         //when
         when(serviceImpl.getAllApplicationsByWorkGroupId(workGroupId)).thenReturn(expectedList);

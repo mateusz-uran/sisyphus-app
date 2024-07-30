@@ -185,13 +185,8 @@ public class WorkGroupServiceTest {
     @Test
     void givenApplicationAndStatus_whenChangeDeniedToOther_thenDecrementCounter() {
         //given
-<<<<<<< HEAD
-        WorkApplications application = WorkApplications.builder().id("1234").status(ApplicationStatus.REJECTED).build();
-        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).workApplications(List.of(application)).build();
-=======
         Applications application = Applications.builder().id("1234").status(ApplicationStatus.REJECTED).build();
         WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).applications(List.of(application)).build();
->>>>>>> dev
 
         when(repository.findAll()).thenReturn(List.of(group));
 
@@ -213,24 +208,15 @@ public class WorkGroupServiceTest {
     @Test
     void givenApplicationAndStatus_whenChangeOtherToDenied_thenIncrementCounter() {
         //given
-<<<<<<< HEAD
-        WorkApplications application = WorkApplications.builder().id("1234").status(ApplicationStatus.SENT).build();
-        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).workApplications(List.of(application)).build();
-=======
         Applications application = Applications.builder().id("1234").status(ApplicationStatus.SENT).build();
         WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).applications(List.of(application)).build();
->>>>>>> dev
 
         when(repository.findAll()).thenReturn(List.of(group));
 
         ArgumentCaptor<WorkGroup> groupCaptor = ArgumentCaptor.forClass(WorkGroup.class);
 
         // when
-<<<<<<< HEAD
-        serviceImpl.updateGroupWhenWorkUpdate(application, ApplicationStatus.REJECTED.name(), application.getStatus().name());
-=======
         serviceImpl.updateGroupWhenApplicationUpdate(application, ApplicationStatus.REJECTED.name(), application.getStatus().name());
->>>>>>> dev
 
         // then
         verify(repository).findAll();
@@ -245,30 +231,18 @@ public class WorkGroupServiceTest {
     @Test
     void givenApplicationAndStatus_whenWorkGroupNotFound_thenThrowException() {
         //given
-<<<<<<< HEAD
-        WorkApplications application = WorkApplications.builder().status(ApplicationStatus.SENT).build();
-
-        //when + then
-        assertThrows(IllegalArgumentException.class, () -> serviceImpl.updateGroupWhenWorkUpdate(application, ApplicationStatus.REJECTED.name(), application.getStatus().name()));
-=======
         Applications application = Applications.builder().status(ApplicationStatus.SENT).build();
 
         //when + then
         assertThrows(IllegalArgumentException.class, () -> serviceImpl.updateGroupWhenApplicationUpdate(application, ApplicationStatus.REJECTED.name(), application.getStatus().name()));
->>>>>>> dev
         verify(repository, never()).save(any());
     }
 
     @Test
     void givenApplication_whenWorkStatusIsNotDeniedAndDelete_thenUpdateWorkGroupCounters() {
         //given
-<<<<<<< HEAD
-        WorkApplications application = WorkApplications.builder().id("1234").status(ApplicationStatus.SENT).build();
-        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).workApplications(List.of(application)).build();
-=======
         Applications application = Applications.builder().id("1234").status(ApplicationStatus.SENT).build();
         WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).applications(List.of(application)).build();
->>>>>>> dev
 
         when(repository.findAll()).thenReturn(List.of(group));
 
@@ -289,13 +263,8 @@ public class WorkGroupServiceTest {
     @Test
     void givenApplication_whenWorkStatusDeniedAndDelete_thenUpdateWorkGroupOneCounter() {
         //given
-<<<<<<< HEAD
-        WorkApplications application = WorkApplications.builder().id("1234").status(ApplicationStatus.REJECTED).build();
-        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).workApplications(List.of(application)).build();
-=======
         Applications application = Applications.builder().id("1234").status(ApplicationStatus.REJECTED).build();
         WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).applications(List.of(application)).build();
->>>>>>> dev
 
         when(repository.findAll()).thenReturn(List.of(group));
 
@@ -315,13 +284,8 @@ public class WorkGroupServiceTest {
     @Test
     void givenApplication_whenStatusIsHired_thenToggleWorkGroup() {
         //given
-<<<<<<< HEAD
-        WorkApplications application = WorkApplications.builder().id("1234").status(ApplicationStatus.HIRED).build();
-        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).workApplications(List.of(application)).build();
-=======
         Applications application = Applications.builder().id("1234").status(ApplicationStatus.HIRED).build();
         WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).applications(List.of(application)).build();
->>>>>>> dev
 
         when(repository.findAll()).thenReturn(List.of(group));
 

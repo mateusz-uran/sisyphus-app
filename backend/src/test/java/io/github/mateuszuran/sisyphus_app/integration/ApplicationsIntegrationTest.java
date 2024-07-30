@@ -5,9 +5,11 @@ import io.github.mateuszuran.sisyphus_app.AbstractIntegrationTest;
 import io.github.mateuszuran.sisyphus_app.SisyphusAppApplication;
 import io.github.mateuszuran.sisyphus_app.model.ApplicationStatus;
 import io.github.mateuszuran.sisyphus_app.model.Applications;
+import io.github.mateuszuran.sisyphus_app.model.Specification;
 import io.github.mateuszuran.sisyphus_app.model.WorkGroup;
 import io.github.mateuszuran.sisyphus_app.repository.ApplicationsRepository;
 import io.github.mateuszuran.sisyphus_app.repository.GroupRepository;
+import io.github.mateuszuran.sisyphus_app.repository.SpecificationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +39,9 @@ public class ApplicationsIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private GroupRepository groupRepository;
+
+    @Autowired
+    private SpecificationRepository specificationRepository;
 
     @Autowired
     private ApplicationsRepository applicationsRepository;
@@ -102,13 +107,11 @@ public class ApplicationsIntegrationTest extends AbstractIntegrationTest {
     @Test
     void givenApplication_whenDelete_thenReturnStatus() throws Exception {
         //given
-<<<<<<< HEAD:backend/src/test/java/io/github/mateuszuran/sisyphus_app/integration/WorkApplicationsIntegrationTest.java
-        WorkApplications work1 = WorkApplications.builder().workUrl("work_url1").status(ApplicationStatus.SENT).build();
-        WorkApplications work2 = WorkApplications.builder().workUrl("work_url2").status(ApplicationStatus.IN_PROGRESS).build();
-=======
-        Applications work1 = Applications.builder().workUrl("work_url1").status(ApplicationStatus.SENT).build();
-        Applications work2 = Applications.builder().workUrl("work_url2").status(ApplicationStatus.IN_PROGRESS).build();
->>>>>>> dev:backend/src/test/java/io/github/mateuszuran/sisyphus_app/integration/ApplicationsIntegrationTest.java
+        Specification spec1 = Specification.builder().companyName("company1").build();
+        Specification spec2 = Specification.builder().companyName("company2").build();
+        specificationRepository.saveAll(List.of(spec1, spec2));
+        Applications work1 = Applications.builder().workUrl("work_url1").status(ApplicationStatus.SENT).specification(spec1).build();
+        Applications work2 = Applications.builder().workUrl("work_url2").status(ApplicationStatus.IN_PROGRESS).specification(spec2).build();
         applicationsRepository.saveAll(List.of(work1, work2));
 
         WorkGroup group = WorkGroup.builder()
@@ -137,11 +140,7 @@ public class ApplicationsIntegrationTest extends AbstractIntegrationTest {
     void givenApplicationIdAndStatus_whenUpdateStatus_thenReturnApplicationAndUpdateWorkGroupCounters() throws Exception {
         //given
         String newStatus = "sent";
-<<<<<<< HEAD:backend/src/test/java/io/github/mateuszuran/sisyphus_app/integration/WorkApplicationsIntegrationTest.java
-        WorkApplications work1 = WorkApplications.builder().workUrl("work_url1").status(ApplicationStatus.REJECTED).build();
-=======
         Applications work1 = Applications.builder().workUrl("work_url1").status(ApplicationStatus.REJECTED).build();
->>>>>>> dev:backend/src/test/java/io/github/mateuszuran/sisyphus_app/integration/ApplicationsIntegrationTest.java
         applicationsRepository.save(work1);
 
         WorkGroup group = WorkGroup.builder()
