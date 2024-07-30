@@ -5,11 +5,7 @@ import {
   WorkApplicationDTO,
   WorkSpecificationDTO,
 } from '../interfaces/work-application';
-<<<<<<< HEAD
-import { Observable, tap } from 'rxjs';
-=======
 import { Observable } from 'rxjs';
->>>>>>> dev
 import { environment } from '../../environments/environment';
 
 @Injectable({
