@@ -10,3 +10,4 @@
 /python/.venv/
 /python/.idea/
 /notes
+/python/app/__pycache__
