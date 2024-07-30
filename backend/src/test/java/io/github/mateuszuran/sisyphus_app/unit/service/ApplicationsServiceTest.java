@@ -5,7 +5,9 @@ import io.github.mateuszuran.sisyphus_app.model.ApplicationStatus;
 import io.github.mateuszuran.sisyphus_app.model.Applications;
 import io.github.mateuszuran.sisyphus_app.model.Specification;
 import io.github.mateuszuran.sisyphus_app.repository.ApplicationsRepository;
+import io.github.mateuszuran.sisyphus_app.repository.SpecificationRepository;
 import io.github.mateuszuran.sisyphus_app.service.ApplicationsServiceImpl;
+import io.github.mateuszuran.sisyphus_app.service.SpecificationsServiceImpl;
 import io.github.mateuszuran.sisyphus_app.service.WorkGroupServiceImpl;
 import io.github.mateuszuran.sisyphus_app.util.TimeUtil;
 import org.junit.jupiter.api.Test;
@@ -35,6 +37,8 @@ public class ApplicationsServiceTest {
     WorkGroupServiceImpl groupService;
     @Mock
     ApplicationsRepository repository;
+    @Mock
+    SpecificationRepository specRepo;
 
     @InjectMocks
     ApplicationsServiceImpl serviceImpl;
@@ -60,7 +64,7 @@ public class ApplicationsServiceTest {
     public void givenApplicationId_whenDelete_thenDoNothing() {
         //given
         String workApplicationId = "1234";
-        var workApplication = Applications.builder().build();
+        var workApplication = Applications.builder().specification(Specification.builder().build()).build();
         when(repository.findById(workApplicationId)).thenReturn(Optional.of(workApplication));
 
         //when
