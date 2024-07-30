@@ -25,9 +25,7 @@ def extract_json_data(html, script_id):
 
 def extract_description(description_html):
     description_soup = BeautifulSoup(description_html, 'html.parser')
-    return [item.get_text(strip=True)
-            for item in
-            description_soup.find_all('li')]
+    return [item.get_text(strip=True) for item in description_soup.find_all('li')]
 
 
 def extract_domain(url):
