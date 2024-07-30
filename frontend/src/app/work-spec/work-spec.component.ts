@@ -19,20 +19,43 @@ import { CommonModule } from '@angular/common';
       >
         <mat-expansion-panel-header>
           <mat-panel-description>
-            <ul
-              class="tech"
-              *ngFor="let tech of specifications()!.technologies"
+            <div
+              class="wrapper"
+              *ngIf="
+                specifications()!.technologies &&
+                  specifications()!.technologies.length > 0;
+                else noTechnologies
+              "
             >
-              <li>{{ tech }}</li>
-            </ul></mat-panel-description
-          >
+              <ul
+                class="tech"
+                *ngFor="let tech of specifications()!.technologies"
+              >
+                <li>{{ tech }}</li>
+              </ul>
+            </div>
+            <ng-template #noTechnologies>
+              <p>Nie było technologi.</p>
+            </ng-template>
+          </mat-panel-description>
         </mat-expansion-panel-header>
 
         <div>
           <h4>Wymagania</h4>
-          <ul class="req" *ngFor="let req of specifications()!.requirements">
-            <li>{{ req }}</li>
-          </ul>
+          <div
+            *ngIf="
+              specifications()!.requirements &&
+                specifications()!.requirements.length > 0;
+              else noRequirements
+            "
+          >
+            <ul class="req" *ngFor="let req of specifications()!.requirements">
+              <li>{{ req }}</li>
+            </ul>
+          </div>
+          <ng-template #noRequirements>
+            <p>Nie było wymagań.</p>
+          </ng-template>
         </div>
       </mat-expansion-panel>
     </section>

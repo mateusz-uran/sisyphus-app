@@ -10,8 +10,12 @@ section {
 
   mat-expansion-panel-header {
     mat-panel-description {
-      ul {
-        list-style: none;
+      .wrapper {
+        display: flex;
+
+        ul {
+          list-style: none;
+        }
       }
     }
   }
