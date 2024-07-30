@@ -1,7 +1,13 @@
 import json
 from jobdata import JobData
 
-from scraper_utils import extract_domain, fetch_html, extract_description, extract_json_data, USER_AGENT
+from scraper_utils import (
+    extract_domain,
+    fetch_html,
+    extract_description,
+    extract_json_data,
+    USER_AGENT
+)
 
 
 # scrap nofluffjobs.pl
@@ -14,8 +20,14 @@ def scrap_nofluffjobs(url):
 
     posting_data = json_data.get('POSTING', {})
     company_name = posting_data.get('company', {}).get('name', "")
-    requirements_must = [req['value'] for req in posting_data.get('requirements', {}).get('musts', [])]
-    description_html = posting_data.get('requirements', {}).get('description', "")
+    requirements_must = [req['value']
+                         for req in
+                         posting_data
+                         .get('requirements', {})
+                         .get('musts', [])]
+    description_html = (posting_data
+                        .get('requirements', {})
+                        .get('description', ""))
     requirements_nice = extract_description(description_html)
 
     job_data = JobData()
@@ -53,9 +65,11 @@ def scrap_pracuj(url):
             for section in sections:
                 section_type = section.get('sectionType', '')
                 if section_type == 'technologies-expected':
-                    job_data.technologies_expected.extend(section.get('textElements', []))
+                    job_data.technologies_expected.extend(section
+                                                          .get('textElements', []))
                 elif section_type == 'requirements-expected':
-                    job_data.requirements_expected.extend(section.get('textElements', []))
+                    job_data.requirements_expected.extend(section
+                                                          .get('textElements', []))
                 elif section_type == 'about-us-description':
                     plain_text = section.get('plainText', '')
                     job_data.company_name = plain_text.split(',', 1)[0]
