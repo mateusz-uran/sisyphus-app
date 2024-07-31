@@ -46,10 +46,12 @@ public class ApplicationsIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private ApplicationsRepository applicationsRepository;
 
+
     @BeforeEach
     public void setUp() throws Exception {
         applicationsRepository.deleteAll();
         groupRepository.deleteAll();
+        specificationRepository.deleteAll();
     }
 
     @Test

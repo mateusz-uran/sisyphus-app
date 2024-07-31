@@ -21,6 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
+import { LoadingApplicationService } from '../services/loading-application.service';
 
 @Component({
   selector: 'app-work-app-form',
@@ -93,7 +94,11 @@ export class WorkAppFormComponent {
 
   formGroup: FormGroup;
 
-  constructor(private fb: FormBuilder, private activatedRoute: ActivatedRoute) {
+  constructor(
+    private fb: FormBuilder,
+    private activatedRoute: ActivatedRoute,
+    private loadingService: LoadingApplicationService
+  ) {
     this.formGroup = this.fb.group({
       workUrls: this.formControl,
     });
@@ -161,18 +166,26 @@ export class WorkAppFormComponent {
             !app.specification ||
             this.isSpecificationEmpty(app.specification)
           ) {
+            this.loadingService.setLoading(true, app.id);
             this.workApplicationService
               .scrapWorkApplicationSpecification(app.workUrl, app.id)
-              .subscribe((response) => {
-                if (response) {
-                  app.specification = response;
-                  this.updateWorkAppList.emit(appList);
-                }
+              .subscribe({
+                next: (response) => {
+                  if (response) {
+                    app.specification = response;
+                    this.updateWorkAppList.emit(appList);
+                  }
+                },
+                error: (error) => {
+                  console.log('Scraper error: ', error);
+                },
+                complete: () => {
+                  this.loadingService.setLoading(false, app.id);
+                },
               });
           }
           return app;
         });
-
         this.updateWorkAppList.emit(updatedAppList);
         this.workUrls.set([]);
       });
