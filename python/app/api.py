@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from scrapers import handle_scrapers
 
+
 frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:4200")
 
 app = Flask(__name__)
