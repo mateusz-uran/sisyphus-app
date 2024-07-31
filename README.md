@@ -31,7 +31,6 @@ The application is still in development, so it currently has a small number of f
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
@@ -61,36 +60,17 @@ Features:
 * Add many or single link to specific group
 * Change status of each application from send to hired
 * Hired animation
+* Scraper for applied job offers
 
 ### Built With
 
-Java 17, Spring Boot 3.3, Angular 18, Angular Material and Animations
+Java 17, Python, Spring Boot 3.3, Angular 18, Angular Material and Animations
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 
 ## Getting Started
-
-### Prerequisites
-
-Requirements for application to work properly:
-
-1. To run application as one compose via docker:
-
-* to run via docker compose create docker images first
-  ```
-  //backend dir
-  docker build --build-arg='APP_VERSION=1.0.0' -t sisyphus/sisyphus-api:1.0.0 .
-  
-  //frontend dir
-  docker build --build-arg='APP_VERSION=1.0.0' -t sisyphus/sisyphus-ui:1.0.0 .
-  ```
-* to run in intellij or another compiler clone code and create mongodb database
-  ```
-  docker run -d --name mongodb-local -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=user -e MONGO_INITDB_ROOT_PASSWORD=pass mongo:jammy
-  ```
-  or add already used database credentials in applicaiton-dev.yml
 
 ### Installation
 
@@ -102,6 +82,8 @@ Requirements for application to work properly:
 Now applicaiton will be available:
 * backend  - http://localhost:8088/api/v1
 * frontend - http://localhost:9090/ or http://localhost:4200 (if running from compiler)
+* python - http://127.0.0.1:5858/scrape
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -136,6 +118,7 @@ Now applicaiton will be available:
 | PATCH     | `/api/v1/applications/single/{applicationId}`              | [update single application](#update-single-application)             |
 | POST      | `/api/v1/applications/save/{workGroupId}`                  | [save applications](#save-applications)                             |
 | DELETE    | `/api/v1/applications/delete/{applicationId}`              | [delete application](#delete-application)                           |
+| POST      | `/api/v1/applications/spec/{applicationId}`                | [scrape application](#scrape-application)                           |
 
 ---
 
@@ -306,6 +289,30 @@ HttpStatus.OK 200
 
 ---
 
+#### Scrape application
+
+endpoint: `/api/v1/applications/spec/1`
+
+|  Path variable   | Required |  Type  | Description                                                  |
+|:----------------:|:--------:|:------:|--------------------------------------------------------------|
+|  applicationId   |  true    | string | Application id to identify if specification already exists   |
+
+_Response example_ </br>
+```
+{
+    "company_name": "Software Mansion",
+    "requirements_expected": [],
+    "technologies_expected": [
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "React native"
+    ]
+}
+```
+
+---
+
 ### Frontend
 - only polish language available - for now
 
@@ -332,6 +339,13 @@ HttpStatus.OK 200
 <p align="center">
   <img src="https://github.com/mateusz-uran/sisyphus-app/blob/readme/readmeimg/applications.png">
 </p>
+
+3.1. New feature - added job offers url is passed to new python API, then its scraped and as a response you can see technologies required for specific job offer. Additionaly in expandable panel there is list of requirements,
+     if this information exists and can be fetched from job offer link will be displayed on interface.
+
+   <p align="center">
+    <img src="https://github.com/mateusz-uran/sisyphus-app/blob/readme/readmeimg/specifications.png">
+   </p>
 
 </br>
 
