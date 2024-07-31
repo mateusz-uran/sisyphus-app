@@ -26,12 +26,11 @@ import { CommonModule } from '@angular/common';
         <p>-</p>
       </ng-template>
       <mat-expansion-panel
-        hideToggle
         (opened)="panelOpenState.set(true)"
         (closed)="panelOpenState.set(false)"
       >
         <mat-expansion-panel-header>
-          <mat-panel-description>Wymagania: </mat-panel-description>
+          <mat-panel-description>Wymagania: &#8628; </mat-panel-description>
         </mat-expansion-panel-header>
         <div
           *ngIf="
