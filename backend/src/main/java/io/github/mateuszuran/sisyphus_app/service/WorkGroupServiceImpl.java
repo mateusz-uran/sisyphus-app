@@ -100,7 +100,7 @@ public class WorkGroupServiceImpl implements WorkGroupService {
         var group = findGroupByGivenApplication(work);
 
         adjustOldStatusCount(work.getStatus().name(), group, true);
-
+        group.getApplications().remove(work);
         repository.save(group);
     }
 

@@ -11,52 +11,41 @@ import { CommonModule } from '@angular/common';
     <section
       *ngIf="specifications() && !isSpecificationEmpty(specifications()!)"
     >
-      <h5>{{ specifications()!.companyName }}</h5>
+      <h5>Nazwa firmy: {{ specifications()!.companyName }}</h5>
+      <div
+        class="technologies"
+        *ngIf="
+          specifications()!.technologies &&
+            specifications()!.technologies.length > 0;
+          else noTechnologies
+        "
+      >
+        <p *ngFor="let tech of specifications()!.technologies">{{ tech }}</p>
+      </div>
+      <ng-template #noTechnologies>
+        <p>-</p>
+      </ng-template>
       <mat-expansion-panel
-        hideToggle
         (opened)="panelOpenState.set(true)"
         (closed)="panelOpenState.set(false)"
       >
         <mat-expansion-panel-header>
-          <mat-panel-description>
-            <div
-              class="wrapper"
-              *ngIf="
-                specifications()!.technologies &&
-                  specifications()!.technologies.length > 0;
-                else noTechnologies
-              "
-            >
-              <ul
-                class="tech"
-                *ngFor="let tech of specifications()!.technologies"
-              >
-                <li>{{ tech }}</li>
-              </ul>
-            </div>
-            <ng-template #noTechnologies>
-              <p>Nie było technologi.</p>
-            </ng-template>
-          </mat-panel-description>
+          <mat-panel-description>Wymagania: &#8628; </mat-panel-description>
         </mat-expansion-panel-header>
-
-        <div>
-          <h4>Wymagania</h4>
-          <div
-            *ngIf="
-              specifications()!.requirements &&
-                specifications()!.requirements.length > 0;
-              else noRequirements
-            "
-          >
-            <ul class="req" *ngFor="let req of specifications()!.requirements">
-              <li>{{ req }}</li>
-            </ul>
-          </div>
-          <ng-template #noRequirements>
-            <p>Nie było wymagań.</p>
-          </ng-template>
+        <div
+          *ngIf="
+            specifications()!.requirements &&
+              specifications()!.requirements.length > 0;
+            else noRequirements
+          "
+        >
+          <ul class="req" *ngFor="let req of specifications()!.requirements">
+            <li>{{ req }}</li>
+          </ul>
         </div>
+        <ng-template #noRequirements>
+          <p>Nie było wymagań.</p>
+        </ng-template>
       </mat-expansion-panel>
     </section>
     <section

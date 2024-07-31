@@ -1,12 +1,13 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorkApplication } from '../interfaces/work-application';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { WorkApplicationsService } from '../services/work-applications.service';
 import { WorkSpecComponent } from '../work-spec/work-spec.component';
+import { LoadingApplicationService } from '../services/loading-application.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-work-app-item',
@@ -18,6 +19,7 @@ import { WorkSpecComponent } from '../work-spec/work-spec.component';
     MatButtonModule,
     MatTooltipModule,
     WorkSpecComponent,
+    MatProgressSpinnerModule,
   ],
   template: `
     <section *ngIf="app() as app">
@@ -65,7 +67,15 @@ import { WorkSpecComponent } from '../work-spec/work-spec.component';
           </button>
         </div>
         <div class="spec">
-          <app-work-spec [specifications]="app.specification"></app-work-spec>
+          <ng-container
+            *ngIf="loadingService.isLoading(app.id); else specContent"
+          >
+            <p class="loading-info">Ładuje info o pracy</p>
+            <mat-spinner [diameter]="20" style="margin:0 auto;"></mat-spinner>
+          </ng-container>
+          <ng-template #specContent>
+            <app-work-spec [specifications]="app.specification"></app-work-spec>
+          </ng-template>
         </div>
       </div>
     </section>
@@ -73,10 +83,6 @@ import { WorkSpecComponent } from '../work-spec/work-spec.component';
   styleUrl: './work-app-item.component.scss',
 })
 export class WorkAppItemComponent {
-  workApplicationService: WorkApplicationsService = inject(
-    WorkApplicationsService
-  );
-
   app = input<WorkApplication>();
 
   workStatus = input<string[]>();
@@ -88,6 +94,8 @@ export class WorkAppItemComponent {
   selectedAppId: string = '';
   allowSaveButton: boolean = false;
   selectedNewStatus: string = '';
+
+  constructor(public loadingService: LoadingApplicationService) {}
 
   changeStatusValue(newStatus: string, oldStatus: string, appId: string) {
     if (newStatus !== oldStatus) {

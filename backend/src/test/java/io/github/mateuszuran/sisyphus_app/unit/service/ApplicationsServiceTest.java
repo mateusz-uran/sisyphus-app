@@ -1,6 +1,7 @@
 package io.github.mateuszuran.sisyphus_app.unit.service;
 
 import io.github.mateuszuran.sisyphus_app.dto.ApplicationDTO;
+import io.github.mateuszuran.sisyphus_app.event.ApplicationDeleteEvent;
 import io.github.mateuszuran.sisyphus_app.model.ApplicationStatus;
 import io.github.mateuszuran.sisyphus_app.model.Applications;
 import io.github.mateuszuran.sisyphus_app.model.Specification;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -38,7 +40,7 @@ public class ApplicationsServiceTest {
     @Mock
     ApplicationsRepository repository;
     @Mock
-    SpecificationRepository specRepo;
+    ApplicationEventPublisher event;
 
     @InjectMocks
     ApplicationsServiceImpl serviceImpl;

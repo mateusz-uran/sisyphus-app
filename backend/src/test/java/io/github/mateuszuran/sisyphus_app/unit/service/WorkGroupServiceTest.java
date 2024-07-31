@@ -242,7 +242,7 @@ public class WorkGroupServiceTest {
     void givenApplication_whenWorkStatusIsNotDeniedAndDelete_thenUpdateWorkGroupCounters() {
         //given
         Applications application = Applications.builder().id("1234").status(ApplicationStatus.SENT).build();
-        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).applications(List.of(application)).build();
+        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).applications(new ArrayList<>(List.of(application))).build();
 
         when(repository.findAll()).thenReturn(List.of(group));
 
@@ -264,7 +264,7 @@ public class WorkGroupServiceTest {
     void givenApplication_whenWorkStatusDeniedAndDelete_thenUpdateWorkGroupOneCounter() {
         //given
         Applications application = Applications.builder().id("1234").status(ApplicationStatus.REJECTED).build();
-        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).applications(List.of(application)).build();
+        WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).applications(new ArrayList<>(List.of(application))).build();
 
         when(repository.findAll()).thenReturn(List.of(group));
 
