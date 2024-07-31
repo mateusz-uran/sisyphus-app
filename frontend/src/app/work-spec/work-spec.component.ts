@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
     >
       <h5>Nazwa firmy: {{ specifications()!.companyName }}</h5>
       <div
-        class="spec"
+        class="technologies"
         *ngIf="
           specifications()!.technologies &&
             specifications()!.technologies.length > 0;

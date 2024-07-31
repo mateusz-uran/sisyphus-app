@@ -9,7 +9,7 @@ section {
     letter-spacing: 1.5px;
   }
 
-  .spec {
+  .technologies {
     display: flex;
     flex-wrap: wrap;
     p {
@@ -20,6 +20,10 @@ section {
       font-size: $font-micro;
       font-weight: 500;
     }
+  }
+
+  mat-expansion-panel {
+    margin-top: 5px;
   }
 
   .empty {
