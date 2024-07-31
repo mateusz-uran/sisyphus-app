@@ -6,17 +6,19 @@ section {
     color: getThemeColor(90, secondary);
     margin-bottom: 5px;
     margin-left: 3px;
+    letter-spacing: 1.5px;
   }
 
-  mat-expansion-panel-header {
-    mat-panel-description {
-      .wrapper {
-        display: flex;
-
-        ul {
-          list-style: none;
-        }
-      }
+  .spec {
+    display: flex;
+    flex-wrap: wrap;
+    p {
+      padding: 5px;
+      margin: 5px;
+      background-color: getThemeColor(80, primary);
+      border-radius: 5px;
+      font-size: $font-micro;
+      font-weight: 500;
     }
   }
 

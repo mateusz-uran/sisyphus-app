@@ -3,12 +3,14 @@ package io.github.mateuszuran.sisyphus_app.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.mateuszuran.sisyphus_app.dto.SpecificationDTO;
+import io.github.mateuszuran.sisyphus_app.event.ApplicationDeleteEvent;
 import io.github.mateuszuran.sisyphus_app.exception.ScraperException;
 import io.github.mateuszuran.sisyphus_app.model.Specification;
 import io.github.mateuszuran.sisyphus_app.repository.SpecificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -93,5 +95,10 @@ public class SpecificationsServiceImpl implements SpecificationsService {
                 .requirements(dto.requirements_expected())
                 .technologies(dto.technologies_expected())
                 .build();
+    }
+
+    @EventListener
+    public void deleteSpecification(ApplicationDeleteEvent event) {
+        repository.deleteById(event.specificationId());
     }
 }
