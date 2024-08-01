@@ -5,11 +5,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { WorkGroupService } from '../services/work-group.service';
 import { RouterModule } from '@angular/router';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-work-group',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+  ],
   template: `<section>
     <div
       [ngClass]="[
@@ -23,7 +30,7 @@ import { RouterModule } from '@angular/router';
         <button mat-flat-button (click)="openPdfInNewTab(workGroup.cvData)">
           Otwórz CV
         </button>
-        <p>{{ workGroup.cvFileName }}</p>
+        <p [matTooltip]="workGroup.cvFileName">{{ workGroup.cvFileName }}</p>
       </div>
       <article>
         <div class="group-content">
