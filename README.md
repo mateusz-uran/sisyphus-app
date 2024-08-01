@@ -1,5 +1,5 @@
 <p align="center">
-The application is still in development, so it currently has a small number of features.
+The application is still in development, so it currently has only a few features.
 </p>
 
 ----
@@ -49,16 +49,15 @@ The application is still in development, so it currently has a small number of f
 
 ## About The Project
 
-Are you looking for your first job as a programmer and sending out an average of a dozen resumes per day? 
-When applying for a specific position, we usually try to tailor the resume to the job offer, 
-resulting in several versions of the same document. 
+Are you looking for your first job as a programmer and sending out an average of a dozen resumes per day? When applying for a specific position, 
+we usually try to tailor the resume to the job offer, resulting in several versions of the same document. 
 The application helps manage this by grouping all job offers to which you have sent a particular resume according to the PDF file.
 
 Features:
 
 * Uploading PDF file via handy drag and drop window
-* Add many or single link to specific group
-* Change status of each application from send to hired
+* Add multiple or single link to a specific group
+* Change the status of each application from "sent" to "hired"
 * Hired animation
 * Scraper for applied job offers
 
@@ -155,7 +154,7 @@ endpoint: `/api/v1/group/single/1`
 
 |  Path variable  | Required |  Type  | Description                                          |
 |:---------------:|:--------:|:------:|------------------------------------------------------|
-|   workGroupId   |  true    | string | Group id to identify which object pull from database |
+|   workGroupId   |  true    | string | Group id to identify which object to pull from the database |
 
 _Response example_ </br>
 ```
@@ -195,7 +194,7 @@ endpoint: `/api/v1/group/delete/1`
 
 |  Path variable  | Required |  Type  | Description                                            |
 |:---------------:|:--------:|:------:|--------------------------------------------------------|
-|   workGroupId   |  true    | string | Group id to identify which object delete from database |
+|   workGroupId   |  true    | string | Group id to identify which object to delete from the database. |
 
 _Response example_ </br>
 ```
@@ -211,7 +210,7 @@ endpoint: `/api/v1/applications/all/1`
 
 |  Path variable  | Required |  Type  | Description                                             |
 |:---------------:|:--------:|:------:|---------------------------------------------------------|
-|   workGroupId   |  true    | string | Group id to identify which applications pull from group |
+|   workGroupId   |  true    | string | Group id to identify which applications to pull from the group |
 
 _Response example_ </br>
 ```
@@ -233,7 +232,7 @@ endpoint: `/api/v1/applications/update/1/hired`
 
 |  Path variable   | Required |  Type  | Description                                                |
 |:----------------:|:--------:|:------:|------------------------------------------------------------|
-|  applicationId   |  true    | string | Application id to identify which object pull from database |
+|  applicationId   |  true    | string | Application id to identify which object to pull from database |
 |     status       |  true    | string | New application status                                     |
 
 _Response example_ </br>
@@ -254,7 +253,7 @@ endpoint: `/api/v1/applications/save/1`
 
 |  Path variable  | Required |  Type  | Description                                             |
 |:---------------:|:--------:|:------:|---------------------------------------------------------|
-|   workGroupId   |  true    | string | Group id to identify where save applications            |
+|   workGroupId   |  true    | string | Group id to identify where to save applications            |
 
 _Request example_ </br>
 ```
@@ -279,7 +278,7 @@ endpoint: `/api/v1/applications/save/1`
 
 |  Path variable   | Required |  Type  | Description                                                  |
 |:----------------:|:--------:|:------:|--------------------------------------------------------------|
-|  applicationId   |  true    | string | Application id to identify which object delete from database |
+|  applicationId   |  true    | string | Application id to identify which object to delete from the database |
 
 _Response example_ </br>
 ```
@@ -295,7 +294,7 @@ endpoint: `/api/v1/applications/spec/1`
 
 |  Path variable   | Required |  Type  | Description                                                  |
 |:----------------:|:--------:|:------:|--------------------------------------------------------------|
-|  applicationId   |  true    | string | Application id to identify if specification already exists   |
+|  applicationId   |  true    | string | Application id to identify if the specification already exists   |
 
 _Response example_ </br>
 ```
@@ -316,8 +315,7 @@ _Response example_ </br>
 ### Frontend
 - only polish language available - for now
 
-1. The first page currently shows only all the added groups (a group is each added PDF file). Each group has counters related to each application.
-   The user can open the file in the browser, delete the group, or browse all the previously added applications for the group.
+1. The first page currently displays all the added groups (each group corresponds to an added PDF file). Each group has counters related to the applications within it. The user can open the file in the browser, delete the group, or browse all the previously added applications for that group.
 
 <p align="center">
   <img src="https://github.com/mateusz-uran/sisyphus-app/blob/readme/readmeimg/home.png">
@@ -325,7 +323,7 @@ _Response example_ </br>
 
 </br>
 
-2. The PDF upload window allows you to add a file in two ways - by dragging the file into the area or by clicking a button that opens a file browsing window. The application has a progress bar when the file is being uploaded to the server, allowing the user to monitor the entire process.
+2. The PDF upload window allows you to add a file in two ways: by dragging the file into the area or by clicking a button that opens a file browsing window. The application includes a progress bar during the file upload process, so users can monitor the progress.
 
 <p align="center">
   <img src="https://github.com/mateusz-uran/sisyphus-app/blob/readme/readmeimg/upload.png">
@@ -333,15 +331,13 @@ _Response example_ </br>
 
 </br>
 
-3. While browsing a group, you can see all the applications made with a given resume. Currently, only the link is visible, but a preview will be available later.
-   Additionally, you can change the status of each application. The default initial status is SENT. The user can update the status during the recruitment process, and finally, there is a HIRED status, which also triggers an animation
+3. While browsing a group, you can see all the applications made with a given resume. Currently, only the link is visible, but a preview will be available later. Additionally, you can change the status of each application. The default initial status is SENT. Users can update the status during the recruitment process, and there is also a HIRED status, which triggers an animation.
 
 <p align="center">
   <img src="https://github.com/mateusz-uran/sisyphus-app/blob/readme/readmeimg/applications.png">
 </p>
 
-3.1. New feature - added job offers url is passed to new python API, then its scraped and as a response you can see technologies required for specific job offer. Additionaly in expandable panel there is list of requirements,
-     if this information exists and can be fetched from job offer link will be displayed on interface.
+3.1. New feature: The URL of added job offers is passed to a new Python API, which scrapes the information. The response includes the technologies required for the specific job offer. Additionally, an expandable panel displays a list of requirements, if this information is available and can be fetched from the job offer link. This will be shown on the interface.
 
    <p align="center">
     <img src="https://github.com/mateusz-uran/sisyphus-app/blob/readme/readmeimg/specifications.png">
@@ -349,7 +345,7 @@ _Response example_ </br>
 
 </br>
 
-4. Above the list of applications, there is a form for adding links to job offers the user has applied to. Multiple links can be added at once, speeding up the entire process.
+4. Above the list of applications, there is a form for adding links to job offers that the user has applied to. Multiple links can be added at once, which speeds up the entire process.
 
 <p align="center">
   <img src="https://github.com/mateusz-uran/sisyphus-app/blob/readme/readmeimg/add links.png">
@@ -357,7 +353,7 @@ _Response example_ </br>
 
 </br>
 
-5. When the user finds a job, they can change the status of the application to HIRED. This will trigger a confetti animation on the screen and a congratulatory message will appear.
+5. When the user finds a job, they can change the status of the application to HIRED. This will trigger a confetti animation on the screen and display a congratulatory message.
 
 <p align="center">
   <img src="https://github.com/mateusz-uran/sisyphus-app/blob/readme/readmeimg/hired.png">
@@ -365,7 +361,7 @@ _Response example_ </br>
 
 </br>
 
-6. Additionally, a trophy animation will be visible next to the group where an application status has been changed to HIRED, allowing for easier identification of the successful application later on.
+6. Additionally, a trophy animation will appear next to the group where the application status has been changed to HIRED, making it easier to identify the successful application later on.
 
 <p align="center">
   <img src="https://github.com/mateusz-uran/sisyphus-app/blob/readme/readmeimg/hired2.png">
