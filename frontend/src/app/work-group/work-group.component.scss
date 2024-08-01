@@ -32,6 +32,16 @@ section {
       button {
         margin-top: 1rem;
       }
+
+      p {
+        margin: 15px 0;
+        color: getThemeColor(80, primary);
+        font-size: $font-micro;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 100px;
+      }
     }
 
     article {
