@@ -19,6 +19,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { CelebratingModalComponent } from '../celebrating-modal/celebrating-modal.component';
 import { ConfettiService } from '../services/confetti.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-group-spec',
@@ -32,11 +35,24 @@ import { ConfettiService } from '../services/confetti.service';
     MatDividerModule,
     MatButtonModule,
     MatIconModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatInputModule,
   ],
   template: ` <app-work-app-form
       (updateWorkAppList)="handleUpdateWorkAppList($event)"
     ></app-work-app-form>
-    <ng-container *ngFor="let app of workApplications">
+    <div class="search-wrapper">
+      <mat-form-field>
+        <mat-label>Szukaj po nazwie firmy</mat-label>
+        <input
+          matInput
+          [(ngModel)]="searchValue"
+          (ngModelChange)="searchFilter($event)"
+        />
+      </mat-form-field>
+    </div>
+    <ng-container *ngFor="let app of filteredWorkApplications">
       <app-work-app-item
         [app]="app"
         [workStatus]="workStatus"
@@ -59,8 +75,12 @@ export class GroupSpecComponent {
   workGroupId$ = this.activatedRoute.params.pipe(map((p) => p['workGroupId']));
 
   workApplications: WorkApplication[] = [];
+  filteredWorkApplications: WorkApplication[] = [];
+
   workStatus: string[] = ['IN_PROGRESS', 'SENT', 'REJECTED', 'HIRED'];
   isScreenSmall: boolean = false;
+
+  searchValue: string = '';
 
   constructor() {
     afterNextRender(() => {
@@ -76,6 +96,7 @@ export class GroupSpecComponent {
       )
       .subscribe((appList: WorkApplication[]) => {
         this.workApplications = appList;
+        this.filteredWorkApplications = appList;
       });
   }
 
@@ -141,5 +162,11 @@ export class GroupSpecComponent {
           )
       ),
     ];
+  }
+
+  searchFilter(event: string) {
+    this.filteredWorkApplications = this.workApplications.filter((work) =>
+      work.specification.companyName.toLowerCase().includes(event.toLowerCase())
+    );
   }
 }
