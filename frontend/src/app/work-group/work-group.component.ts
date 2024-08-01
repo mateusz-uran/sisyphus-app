@@ -23,6 +23,7 @@ import { RouterModule } from '@angular/router';
         <button mat-flat-button (click)="openPdfInNewTab(workGroup.cvData)">
           Otwórz CV
         </button>
+        <p>{{ workGroup.cvFileName }}</p>
       </div>
       <article>
         <div class="group-content">

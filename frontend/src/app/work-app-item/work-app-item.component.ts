@@ -25,11 +25,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     <section *ngIf="app() as app">
       <div class="app content">
         <div class="link-wrapper">
-          <p
-            class="h-font-small"
-            [matTooltip]="app.workUrl"
-            matTooltipPosition="above"
-          >
+          <p [matTooltip]="app.workUrl" matTooltipPosition="above">
             {{ app.workUrl }}
           </p>
           <a mat-stroked-button [href]="app.workUrl">Otwórz</a>
