@@ -17,6 +17,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -52,7 +53,8 @@ public class ApplicationsServiceImpl implements ApplicationsService {
     public void deleteApplication(String applicationId) {
         var applicationToDelete = getSingleApplication(applicationId);
         groupServiceImpl.updateGroupWhenApplicationDelete(applicationToDelete);
-        if (applicationToDelete.getSpecification() != null) {
+
+        if (applicationToDelete.getSpecification().getId() != null) {
             event.publishEvent(new ApplicationDeleteEvent(applicationToDelete.getSpecification().getId()));
         }
         repository.delete(applicationToDelete);
