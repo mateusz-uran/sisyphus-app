@@ -6,11 +6,9 @@ import io.github.mateuszuran.sisyphus_app.model.ApplicationStatus;
 import io.github.mateuszuran.sisyphus_app.model.Applications;
 import io.github.mateuszuran.sisyphus_app.model.Specification;
 import io.github.mateuszuran.sisyphus_app.repository.ApplicationsRepository;
-import io.github.mateuszuran.sisyphus_app.repository.SpecificationRepository;
 import io.github.mateuszuran.sisyphus_app.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -52,7 +50,8 @@ public class ApplicationsServiceImpl implements ApplicationsService {
     public void deleteApplication(String applicationId) {
         var applicationToDelete = getSingleApplication(applicationId);
         groupServiceImpl.updateGroupWhenApplicationDelete(applicationToDelete);
-        if (applicationToDelete.getSpecification() != null) {
+
+        if (applicationToDelete.getSpecification().getId() != null) {
             event.publishEvent(new ApplicationDeleteEvent(applicationToDelete.getSpecification().getId()));
         }
         repository.delete(applicationToDelete);

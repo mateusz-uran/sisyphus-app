@@ -178,6 +178,7 @@ export class WorkAppFormComponent {
                 },
                 error: (error) => {
                   console.log('Scraper error: ', error);
+                  this.loadingService.setLoading(false, app.id);
                 },
                 complete: () => {
                   this.loadingService.setLoading(false, app.id);

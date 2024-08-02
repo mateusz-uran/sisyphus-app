@@ -139,25 +139,25 @@ export class GroupSpecComponent {
   }
 
   deleteWork(appId: string) {
-    this.workApplicationService.deleteWorkApplication(appId).subscribe(
-      () => {
-        this.workApplications = this.workApplications.filter(
+    this.workApplicationService.deleteWorkApplication(appId).subscribe({
+      next: () => {
+        this.filteredWorkApplications = this.filteredWorkApplications.filter(
           (app) => app.id !== appId
         );
       },
-      (error) => {
+      error: (error) => {
         console.error('Failed to delete application:', error);
         // TODO: handle error
-      }
-    );
+      },
+    });
   }
 
   handleUpdateWorkAppList(event: WorkApplication[]): void {
-    this.workApplications = [
-      ...this.workApplications,
+    this.filteredWorkApplications = [
+      ...this.filteredWorkApplications,
       ...event.filter(
         (app) =>
-          !this.workApplications.some(
+          !this.filteredWorkApplications.some(
             (existingApp) => existingApp.id === app.id
           )
       ),
