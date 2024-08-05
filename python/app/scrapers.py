@@ -50,15 +50,16 @@ def scrap_pracuj(url):
             data = state.get('data', {})
             sections = data.get('textSections', [])
 
+            attributes = data.get('attributes', {})
+            if attributes:
+                job_data.company_name = attributes.get('displayEmployerName', job_data.company_name)
+
             for section in sections:
                 section_type = section.get('sectionType', '')
                 if section_type == 'technologies-expected':
                     job_data.technologies_expected.extend(section.get('textElements', []))
                 elif section_type == 'requirements-expected':
                     job_data.requirements_expected.extend(section.get('textElements', []))
-                elif section_type == 'about-us-description':
-                    plain_text = section.get('plainText', '')
-                    job_data.company_name = plain_text.split(',', 1)[0]
 
         return json.dumps(job_data.to_dict(), indent=4, ensure_ascii=False)
 
