@@ -62,12 +62,16 @@ section {
         flex-direction: column;
         align-items: center;
         padding: 1rem;
-        justify-content: space-around;
+        justify-content: center;
 
         p:first-child {
           font-weight: 600;
           font-size: $font-small;
           color: getThemeColor(60, neutral);
+        }
+
+        p {
+          margin: 15px 0;
         }
       }
     }
