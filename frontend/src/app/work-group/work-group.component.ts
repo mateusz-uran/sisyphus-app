@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { WorkGroupService } from '../services/work-group.service';
 import { RouterModule } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 
 @Component({
   selector: 'app-work-group',
@@ -16,6 +17,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
+    PdfViewerComponent,
   ],
   template: `<section>
     <div
@@ -26,7 +28,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
       ]"
     >
       <div class="link-wrapper">
-        <img src="./vector_cv_resized.png" alt="cv_template" />
+        <app-pdf-viewer [cv]="workGroup.cvData"></app-pdf-viewer>
         <button mat-flat-button (click)="openPdfInNewTab(workGroup.cvData)">
           Otwórz CV
         </button>
@@ -80,7 +82,7 @@ export class WorkGroupComponent {
   deleteWorkGroup(workGroupId: string): void {
     this.workGroupService.deleteWorkGroup(workGroupId).subscribe({
       next: () => {
-        console.log('Delete successful');
+        console.log('Deleted work group');
         // TODO: handle information
       },
       error: (err: any) => {
