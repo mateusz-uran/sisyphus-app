@@ -7,16 +7,16 @@ FROM python:3.10.14-slim-bullseye
 ENV PYTHONUNBUFFERED=1
 
 # Create and set the working directory
-WORKDIR /app
+WORKDIR /scraper
 
 # Copy the requirements file into the container
-COPY requirements.txt /app/
+COPY requirements.txt /scraper/
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code into the container
-COPY . /app/
+COPY . /scraper/
 
 # Expose the port that the application will run on
 EXPOSE 5858
@@ -24,5 +24,8 @@ EXPOSE 5858
 # Set the environment variable for the frontend URL (optional default value can be overridden when running the container).
 ENV FRONTEND_URL=http://localhost:9090
 
+ENV PYTHONPATH=/scraper
+
 # Specify the command to run your application
-CMD ["python", "app/api.py"]
+#CMD ["python", "app/api.py"]
+CMD ["gunicorn", "-w", "4", "--bind", "0.0.0.0:5858", "app.api:app"]
