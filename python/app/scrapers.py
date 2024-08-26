@@ -1,7 +1,7 @@
 import json
-from jobdata import JobData
+from app.jobdata import JobData
 
-from scraper_utils import extract_domain, fetch_html, extract_description, extract_json_data, USER_AGENT
+from app.scraper_utils import extract_domain, fetch_html, extract_description, extract_json_data, USER_AGENT
 
 
 # scrap nofluffjobs.pl

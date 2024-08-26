@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>io.github.mateuszuran</groupId>
-	<artifactId>sisyphus-app</artifactId>
+	<artifactId>sisyphus-api</artifactId>
 	<version>1.1.7</version>
 	<name>sisyphus-app</name>
 	<description>Application to store sisyphus work (lol)</description>
