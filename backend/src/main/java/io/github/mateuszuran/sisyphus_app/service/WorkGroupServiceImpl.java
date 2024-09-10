@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Base64;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -80,8 +82,9 @@ public class WorkGroupServiceImpl implements WorkGroupService {
 
     @Override
     public List<Applications> getAllApplicationsFromWorkGroup(String workGroupId) {
-        var groupToFind = getWorkGroup(workGroupId);
-        return groupToFind.getApplications();
+        var applications = getWorkGroup(workGroupId).getApplications();
+        applications.sort(Comparator.comparing(Applications::getAppliedDate));
+        return applications;
     }
 
 
@@ -170,6 +173,7 @@ public class WorkGroupServiceImpl implements WorkGroupService {
                                 .inProgress(group.getInProgress())
                                 .isHired(group.isHired())
                                 .build())
+                .sorted(Comparator.comparing(WorkGroupDTO::creationTime))
                 .toList();
     }
 }

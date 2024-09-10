@@ -61,9 +61,9 @@ public class ApplicationsIntegrationTest extends AbstractIntegrationTest {
         WorkGroup group = WorkGroup.builder().creationTime("today").build();
         WorkGroup savedWorkGroup = groupRepository.save(group);
 
-        Applications app1 = Applications.builder().workUrl("url1").build();
-        Applications app2 = Applications.builder().workUrl("url2").build();
-        Applications app3 = Applications.builder().workUrl("url3").build();
+        Applications app1 = Applications.builder().workUrl("url1").appliedDate("12-08-2024").build();
+        Applications app2 = Applications.builder().workUrl("url2").appliedDate("13-08-2024").build();
+        Applications app3 = Applications.builder().workUrl("url3").appliedDate("14-08-2024").build();
         List<Applications> appList = List.of(app1, app2, app3);
         var savedApplications = applicationsRepository.saveAll(appList);
 
