@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -104,6 +105,21 @@ public class ApplicationsIntegrationTest extends AbstractIntegrationTest {
         Assertions.assertTrue(savedWork.isPresent());
         Assertions.assertEquals(savedWork.get().getStatus(), ApplicationStatus.SENT);
         Assertions.assertEquals(groupResult.getSent(), 1);
+    }
+
+    @Test
+    void givenEmptyList_whenSave_thenThrowException() throws Exception {
+        //given
+        WorkGroup group = WorkGroup.builder().creationTime("tomorrow").build();
+        var savedGroup = groupRepository.save(group);
+
+        //when
+        mockMvc.perform(post("/applications/save/" + savedGroup.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(List.of())))
+                .andExpect(status().isForbidden())
+                .andDo(print())
+                .andExpect(jsonPath("$.detail").value("Applications list cannot be empty"));
     }
 
     @Test

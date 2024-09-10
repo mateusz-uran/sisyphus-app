@@ -2,6 +2,7 @@ package io.github.mateuszuran.sisyphus_app.service;
 
 import io.github.mateuszuran.sisyphus_app.dto.ApplicationDTO;
 import io.github.mateuszuran.sisyphus_app.event.ApplicationDeleteEvent;
+import io.github.mateuszuran.sisyphus_app.exception.ServiceException;
 import io.github.mateuszuran.sisyphus_app.model.ApplicationStatus;
 import io.github.mateuszuran.sisyphus_app.model.Applications;
 import io.github.mateuszuran.sisyphus_app.model.Specification;
@@ -10,6 +11,7 @@ import io.github.mateuszuran.sisyphus_app.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -30,7 +32,7 @@ public class ApplicationsServiceImpl implements ApplicationsService {
     public void createApplications(List<ApplicationDTO> applications, String workGroupId) {
         String creationTime = timeUtil.formatCreationTime();
 
-        // TODO: check if applications list is empty, if so throw exception or something
+        if (applications.isEmpty()) throw new ServiceException("Applications list cannot be empty", HttpStatus.FORBIDDEN);
 
         var workApplicationList = applications
                 .stream()
@@ -64,9 +66,7 @@ public class ApplicationsServiceImpl implements ApplicationsService {
         String oldStatus = workToUpdate.getStatus().name();
 
         if (workToUpdate.getStatus().equals(ApplicationStatus.getByUpperCaseStatus(newStatus))) {
-            // TODO: 07.06.2024 add custom exception
-            log.info("Status are equal, cant update.");
-            return null;
+            throw new ServiceException("New status is the same as old status, cannot update", HttpStatus.FORBIDDEN);
         }
 
         workToUpdate.setStatus(ApplicationStatus.getByUpperCaseStatus(newStatus));

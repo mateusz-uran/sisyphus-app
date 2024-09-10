@@ -11,4 +11,9 @@ public class GlobalExceptionHandler {
     ProblemDetail handleScraperException(ScraperException e) {
         return ProblemDetail.forStatusAndDetail(e.getStatus(), e.getMessage());
     }
+
+    @ExceptionHandler(ServiceException.class)
+    ProblemDetail handleServiceException(ServiceException e) {
+        return ProblemDetail.forStatusAndDetail(e.getStatus(), e.getMessage());
+    }
 }
