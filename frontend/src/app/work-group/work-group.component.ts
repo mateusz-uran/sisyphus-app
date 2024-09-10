@@ -7,6 +7,8 @@ import { WorkGroupService } from '../services/work-group.service';
 import { RouterModule } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
+import { openSnackbar } from '../utilities/snackbarFunction';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-work-group',
@@ -71,6 +73,8 @@ export class WorkGroupComponent {
   @Input() workGroup!: TransformedWorkGroup;
   workGroupService: WorkGroupService = inject(WorkGroupService);
 
+  constructor(private _snackBar: MatSnackBar) {}
+
   ngOnInit(): void {}
 
   openPdfInNewTab(cvBlob: Blob): void {
@@ -83,11 +87,11 @@ export class WorkGroupComponent {
     this.workGroupService.deleteWorkGroup(workGroupId).subscribe({
       next: () => {
         console.log('Deleted work group');
-        // TODO: handle information
+        openSnackbar(this._snackBar, 'Grupa usunięta!', 'Ok');
       },
       error: (err: any) => {
         console.error('Error deleting work group', err);
-        // TODO: handle error information
+        openSnackbar(this._snackBar, 'Błąd usuwania grupy!', 'Ok');
       },
     });
   }

@@ -22,6 +22,8 @@ import { ConfettiService } from '../services/confetti.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { openSnackbar } from '../utilities/snackbarFunction';
 
 @Component({
   selector: 'app-group-spec',
@@ -82,7 +84,7 @@ export class GroupSpecComponent {
 
   searchValue: string = '';
 
-  constructor() {
+  constructor(private _snackBar: MatSnackBar) {
     afterNextRender(() => {
       this.checkScreenWidth();
     });
@@ -147,7 +149,7 @@ export class GroupSpecComponent {
       },
       error: (error) => {
         console.error('Failed to delete application:', error);
-        // TODO: handle error
+        openSnackbar(this._snackBar, 'Błąd usuwania aplikacji!', 'Ok');
       },
     });
   }
@@ -166,7 +168,9 @@ export class GroupSpecComponent {
 
   searchFilter(event: string) {
     this.filteredWorkApplications = this.workApplications.filter((work) =>
-      work.specification.companyName.toLowerCase().includes(event.toLowerCase())
+      work.specification.companyName
+        ?.toLowerCase()
+        .includes(event.toLowerCase())
     );
   }
 }

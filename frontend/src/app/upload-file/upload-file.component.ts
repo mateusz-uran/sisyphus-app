@@ -14,6 +14,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { openSnackbar } from '../utilities/snackbarFunction';
 
 @Component({
   selector: 'app-upload-file',
@@ -77,7 +78,7 @@ export class UploadFileComponent {
 
   checkFileMimeType(file: File): boolean {
     if (this.MIME_type_accepted !== file.type) {
-      this.handleSnackBar('Wrong file type', 'Ok');
+      openSnackbar(this._snackBar, 'Nieprawidłowy format pliku', 'Ok');
       return false;
     }
     return true;
@@ -111,14 +112,14 @@ export class UploadFileComponent {
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.isUploading = false;
-            this.handleSnackBar('File uploaded successfuly!', 'Ok');
+            openSnackbar(this._snackBar, 'Dodano plik do grupy!', 'Ok');
           }
         },
         error: (err: any) => {
           console.log('Error: ', err);
           this.currentFile = undefined;
           this.isUploading = false;
-          this.handleSnackBar('Could not upload the file!', 'Ok');
+          openSnackbar(this._snackBar, 'Nie można wrzucić pliku!', 'Ok');
         },
         complete: () => {
           this.currentFile = undefined;
@@ -127,9 +128,5 @@ export class UploadFileComponent {
         },
       });
     }
-  }
-
-  handleSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action);
   }
 }
