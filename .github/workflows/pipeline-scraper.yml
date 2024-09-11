@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - ci/cd
+      - master
     paths:
       - python/**  # Adjust this if needed
       - 'Dockerfile'
