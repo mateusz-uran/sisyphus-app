@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -41,10 +42,11 @@ public class ApplicationsIntegrationTest extends AbstractIntegrationTest {
     private GroupRepository groupRepository;
 
     @Autowired
-    private ApplicationsRepository applicationsRepository;
+    private SpecificationRepository specificationRepository;
 
     @Autowired
-    private SpecificationRepository specificationRepository;
+    private ApplicationsRepository applicationsRepository;
+
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -59,9 +61,9 @@ public class ApplicationsIntegrationTest extends AbstractIntegrationTest {
         WorkGroup group = WorkGroup.builder().creationTime("today").build();
         WorkGroup savedWorkGroup = groupRepository.save(group);
 
-        Applications app1 = Applications.builder().workUrl("url1").build();
-        Applications app2 = Applications.builder().workUrl("url2").build();
-        Applications app3 = Applications.builder().workUrl("url3").build();
+        Applications app1 = Applications.builder().workUrl("url1").appliedDate("12-08-2024").build();
+        Applications app2 = Applications.builder().workUrl("url2").appliedDate("13-08-2024").build();
+        Applications app3 = Applications.builder().workUrl("url3").appliedDate("14-08-2024").build();
         List<Applications> appList = List.of(app1, app2, app3);
         var savedApplications = applicationsRepository.saveAll(appList);
 
@@ -106,12 +108,26 @@ public class ApplicationsIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    void givenEmptyList_whenSave_thenThrowException() throws Exception {
+        //given
+        WorkGroup group = WorkGroup.builder().creationTime("tomorrow").build();
+        var savedGroup = groupRepository.save(group);
+
+        //when
+        mockMvc.perform(post("/applications/save/" + savedGroup.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(List.of())))
+                .andExpect(status().isForbidden())
+                .andDo(print())
+                .andExpect(jsonPath("$.detail").value("Applications list cannot be empty"));
+    }
+
+    @Test
     void givenApplication_whenDelete_thenReturnStatus() throws Exception {
         //given
         Specification spec1 = Specification.builder().companyName("company1").build();
         Specification spec2 = Specification.builder().companyName("company2").build();
         specificationRepository.saveAll(List.of(spec1, spec2));
-
         Applications work1 = Applications.builder().workUrl("work_url1").status(ApplicationStatus.SENT).specification(spec1).build();
         Applications work2 = Applications.builder().workUrl("work_url2").status(ApplicationStatus.IN_PROGRESS).specification(spec2).build();
         applicationsRepository.saveAll(List.of(work1, work2));

@@ -165,9 +165,9 @@ public class WorkGroupServiceTest {
         String workGroupId = "123";
         WorkGroup group = WorkGroup.builder().id(workGroupId).applications(new ArrayList<>()).build();
 
-        Applications application1 = Applications.builder().workUrl("work1").build();
-        Applications application2 = Applications.builder().workUrl("work2").build();
-        Applications application3 = Applications.builder().workUrl("work3").build();
+        Applications application1 = Applications.builder().workUrl("work1").appliedDate("12-08-2024").build();
+        Applications application2 = Applications.builder().workUrl("work2").appliedDate("13-08-2024").build();
+        Applications application3 = Applications.builder().workUrl("work3").appliedDate("14-08-2024").build();
         var applicationsList = List.of(application1, application2, application3);
         group.getApplications().addAll(applicationsList);
         when(repository.findById(workGroupId)).thenReturn(Optional.of(group));

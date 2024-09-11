@@ -11,7 +11,12 @@ import { CommonModule } from '@angular/common';
     <section
       *ngIf="specifications() && !isSpecificationEmpty(specifications()!)"
     >
-      <h5>Nazwa firmy: {{ specifications()!.companyName }}</h5>
+      <div class="company">
+        <p>Nazwa firmy:</p>
+        <h5>
+          {{ specifications()!.companyName }}
+        </h5>
+      </div>
       <div
         class="technologies"
         *ngIf="

@@ -2,6 +2,7 @@ package io.github.mateuszuran.sisyphus_app.unit.service;
 
 import io.github.mateuszuran.sisyphus_app.dto.ApplicationDTO;
 import io.github.mateuszuran.sisyphus_app.event.ApplicationDeleteEvent;
+import io.github.mateuszuran.sisyphus_app.exception.ServiceException;
 import io.github.mateuszuran.sisyphus_app.model.ApplicationStatus;
 import io.github.mateuszuran.sisyphus_app.model.Applications;
 import io.github.mateuszuran.sisyphus_app.model.Specification;
@@ -63,6 +64,16 @@ public class ApplicationsServiceTest {
     }
 
     @Test
+    public void givenApplicationListEmpty_whenAdd_thenThrowException() {
+        //given
+        String workGroupId = "123";
+        //when + then
+        assertThrows(ServiceException.class, () -> serviceImpl.createApplications(List.of(), null));
+        verify(repository, never()).findById(anyString());
+        verify(repository, never()).save(any());
+    }
+
+    @Test
     public void givenApplicationId_whenDelete_thenDoNothing() {
         //given
         String workApplicationId = "1234";
@@ -92,6 +103,18 @@ public class ApplicationsServiceTest {
 
         //then
         assertThat(result).isEqualTo(updatedWork);
+    }
+
+    @Test
+    public void givenApplicationStatus_whenUpdateAndStatusEqual_thenThrowException() {
+        //given
+        String applicationId = "123";
+        String newStatus = "SENT";
+        Applications work = Applications.builder().workUrl("work1").status(ApplicationStatus.SENT).build();
+        when(repository.findById(applicationId)).thenReturn(Optional.of(work));
+        //when + then
+        assertThrows(ServiceException.class, () -> serviceImpl.updateApplicationStatus(applicationId, newStatus));
+        verify(repository, never()).save(any());
     }
 
     @Test

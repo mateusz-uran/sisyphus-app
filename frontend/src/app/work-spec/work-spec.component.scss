@@ -2,11 +2,21 @@
 @import "../../styles/mixin.scss";
 
 section {
-  h5 {
+  .company {
     color: getThemeColor(90, secondary);
     margin-bottom: 5px;
     margin-left: 3px;
     letter-spacing: 1.5px;
+    display: flex;
+  }
+
+  p {
+    font-size: $font-micro;
+  }
+
+  h5 {
+    max-block-size: 5px;
+    padding-left: 5px;
   }
 
   .technologies {
