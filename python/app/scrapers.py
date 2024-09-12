@@ -1,7 +1,8 @@
 import json
 from app.jobdata import JobData
 
-from app.scraper_utils import extract_domain, fetch_html, extract_description, extract_json_data, USER_AGENT
+from app.scraper_utils import (extract_domain, create_soup, fetch_html, extract_description,
+                               extract_json_data, USER_AGENT)
 
 
 # scrap nofluffjobs.pl
@@ -68,8 +69,6 @@ def scrap_pracuj(url):
 
 
 # scrap justjoin.it
-# technologies_requirements must remain empty since justjoin.it
-# keeps those data inside body with html elements
 def scrap_justjoinit(url):
     headers = {
         'User-Agent': USER_AGENT
@@ -91,6 +90,16 @@ def scrap_justjoinit(url):
         for technologies in text_sections.get('requiredSkills', []):
             job_data.technologies_expected.append(technologies.get('name', ''))
 
+        body = text_sections.get('body', '')
+        if body:
+            soup_el = create_soup(body)
+
+            req = [li.get_text(strip=True) for li in soup_el.find_all('li')]
+
+            # TODO: extract requirements from list
+
+            job_data.requirements_expected = req
+
         return json.dumps(job_data.to_dict(), indent=4, ensure_ascii=False)
 
     except Exception as e:
@@ -98,8 +107,6 @@ def scrap_justjoinit(url):
 
 
 # scrap bulldogjob.pl
-# technologies_requirements must remain empty since bulldogjob.pl
-# keeps those data inside body with html elements
 def scrap_bulldogjob(url):
     headers = {
         'User-Agent': USER_AGENT
@@ -123,6 +130,14 @@ def scrap_bulldogjob(url):
 
         company = text_sections.get('company', {})
         job_data.company_name = company.get('name', '')
+
+        req = text_sections.get('requirements', '')
+        if req:
+            soup_el = create_soup(req)
+
+            req_list = [li.get_text(strip=True) for li in soup_el.find_all('li')]
+
+            job_data.requirements_expected = req_list
 
         return json.dumps(job_data.to_dict(), indent=4, ensure_ascii=False)
 

@@ -23,6 +23,12 @@ def extract_json_data(html, script_id):
     return json.loads(script_tag.string)
 
 
+def create_soup(element):
+    if not element:
+        raise ValueError("Cannot create soup from an empty element.")
+    return BeautifulSoup(element, 'html.parser')
+
+
 def extract_description(description_html):
     description_soup = BeautifulSoup(description_html, 'html.parser')
     return [item.get_text(strip=True) for item in description_soup.find_all('li')]
