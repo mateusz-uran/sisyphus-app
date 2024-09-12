@@ -1,7 +1,8 @@
 import json
 from app.jobdata import JobData
 
-from app.scraper_utils import extract_domain, fetch_html, extract_description, extract_json_data, USER_AGENT
+from app.scraper_utils import (extract_domain, create_soup, fetch_html, extract_description,
+                               extract_json_data, USER_AGENT)
 
 
 # scrap nofluffjobs.pl
@@ -67,6 +68,83 @@ def scrap_pracuj(url):
         return f"Exception: {e}"
 
 
+# scrap justjoin.it
+def scrap_justjoinit(url):
+    headers = {
+        'User-Agent': USER_AGENT
+    }
+    html = fetch_html(url, headers)
+    json_data = extract_json_data(html, '__NEXT_DATA__')
+
+    try:
+        text_sections = (
+            json_data
+            .get('props', {})
+            .get('pageProps', {})
+            .get('offer', {})
+        )
+
+        job_data = JobData()
+        job_data.company_name = text_sections.get('companyName', '')
+
+        for technologies in text_sections.get('requiredSkills', []):
+            job_data.technologies_expected.append(technologies.get('name', ''))
+
+        body = text_sections.get('body', '')
+        if body:
+            soup_el = create_soup(body)
+
+            req = [li.get_text(strip=True) for li in soup_el.find_all('li')]
+
+            # TODO: extract requirements from list
+
+            job_data.requirements_expected = req
+
+        return json.dumps(job_data.to_dict(), indent=4, ensure_ascii=False)
+
+    except Exception as e:
+        return f"Exception: {e}"
+
+
+# scrap bulldogjob.pl
+def scrap_bulldogjob(url):
+    headers = {
+        'User-Agent': USER_AGENT
+    }
+    html = fetch_html(url, headers)
+    json_data = extract_json_data(html, '__NEXT_DATA__')
+
+    try:
+        text_sections = (
+            json_data
+            .get('props', {})
+            .get('pageProps', {})
+            .get('data', {})
+            .get('job', {})
+        )
+
+        job_data = JobData()
+
+        for technologies in text_sections.get('technologyTags', []):
+            job_data.technologies_expected.append(technologies)
+
+        company = text_sections.get('company', {})
+        job_data.company_name = company.get('name', '')
+
+        req = text_sections.get('requirements', '')
+        if req:
+            soup_el = create_soup(req)
+
+            req_list = [li.get_text(strip=True) for li in soup_el.find_all('li')]
+
+            job_data.requirements_expected = req_list
+
+        return json.dumps(job_data.to_dict(), indent=4, ensure_ascii=False)
+
+    except Exception as e:
+        return f"Exception: {e}"
+
+
 def handle_scrapers(url):
     domain = extract_domain(url)
     match domain:
@@ -74,5 +152,9 @@ def handle_scrapers(url):
             return json.loads(scrap_pracuj(url))
         case 'nofluffjobs':
             return json.loads(scrap_nofluffjobs(url))
+        case 'justjoin':
+            return json.loads(scrap_justjoinit(url))
+        case 'bulldogjob':
+            return json.loads(scrap_bulldogjob(url))
         case _:
             return f"Scrape for {domain} not found."
