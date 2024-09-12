@@ -69,7 +69,7 @@ def scrap_pracuj(url):
 
 # scrap justjoin.it
 # technologies_requirements must remain empty since justjoin.it
-# those data have inside body and p tags
+# keeps those data inside body with html elements
 def scrap_justjoinit(url):
     headers = {
         'User-Agent': USER_AGENT
@@ -88,8 +88,41 @@ def scrap_justjoinit(url):
         job_data = JobData()
         job_data.company_name = text_sections.get('companyName', '')
 
-        for skills in text_sections.get('requiredSkills', []):
-            job_data.technologies_expected.append(skills.get('name', ''))
+        for technologies in text_sections.get('requiredSkills', []):
+            job_data.technologies_expected.append(technologies.get('name', ''))
+
+        return json.dumps(job_data.to_dict(), indent=4, ensure_ascii=False)
+
+    except Exception as e:
+        return f"Exception: {e}"
+
+
+# scrap bulldogjob.pl
+# technologies_requirements must remain empty since bulldogjob.pl
+# keeps those data inside body with html elements
+def scrap_bulldogjob(url):
+    headers = {
+        'User-Agent': USER_AGENT
+    }
+    html = fetch_html(url, headers)
+    json_data = extract_json_data(html, '__NEXT_DATA__')
+
+    try:
+        text_sections = (
+            json_data
+            .get('props', {})
+            .get('pageProps', {})
+            .get('data', {})
+            .get('job', {})
+        )
+
+        job_data = JobData()
+
+        for technologies in text_sections.get('technologyTags', []):
+            job_data.technologies_expected.append(technologies)
+
+        company = text_sections.get('company', {})
+        job_data.company_name = company.get('name', '')
 
         return json.dumps(job_data.to_dict(), indent=4, ensure_ascii=False)
 
@@ -106,5 +139,7 @@ def handle_scrapers(url):
             return json.loads(scrap_nofluffjobs(url))
         case 'justjoin':
             return json.loads(scrap_justjoinit(url))
+        case 'bulldogjob':
+            return json.loads(scrap_bulldogjob(url))
         case _:
             return f"Scrape for {domain} not found."
