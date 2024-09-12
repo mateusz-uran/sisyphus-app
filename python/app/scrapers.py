@@ -67,6 +67,36 @@ def scrap_pracuj(url):
         return f"Exception: {e}"
 
 
+# scrap justjoin.it
+# technologies_requirements must remain empty since justjoin.it
+# those data have inside body and p tags
+def scrap_justjoinit(url):
+    headers = {
+        'User-Agent': USER_AGENT
+    }
+    html = fetch_html(url, headers)
+    json_data = extract_json_data(html, '__NEXT_DATA__')
+
+    try:
+        text_sections = (
+            json_data
+            .get('props', {})
+            .get('pageProps', {})
+            .get('offer', {})
+        )
+
+        job_data = JobData()
+        job_data.company_name = text_sections.get('companyName', '')
+
+        for skills in text_sections.get('requiredSkills', []):
+            job_data.technologies_expected.append(skills.get('name', ''))
+
+        return json.dumps(job_data.to_dict(), indent=4, ensure_ascii=False)
+
+    except Exception as e:
+        return f"Exception: {e}"
+
+
 def handle_scrapers(url):
     domain = extract_domain(url)
     match domain:
@@ -74,5 +104,7 @@ def handle_scrapers(url):
             return json.loads(scrap_pracuj(url))
         case 'nofluffjobs':
             return json.loads(scrap_nofluffjobs(url))
+        case 'justjoin':
+            return json.loads(scrap_justjoinit(url))
         case _:
             return f"Scrape for {domain} not found."
