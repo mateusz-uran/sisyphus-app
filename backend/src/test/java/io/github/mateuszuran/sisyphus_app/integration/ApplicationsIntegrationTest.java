@@ -73,9 +73,28 @@ public class ApplicationsIntegrationTest extends AbstractIntegrationTest {
         //when + then
         mockMvc.perform(get("/applications/all/" + updatedGroup.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].workUrl").value("url1"))
+                .andExpect(jsonPath("$.[0].workUrl").value("url3"))
                 .andExpect(jsonPath("$.[1].workUrl").value("url2"));
 
+    }
+
+    @Test
+    void givenWorkGroupId_whenGetAllApplicationsAndSortWithInvalidDate_thenReturnBadRequest() throws Exception {
+        WorkGroup group = WorkGroup.builder().creationTime("today").build();
+        WorkGroup savedWorkGroup = groupRepository.save(group);
+
+        Applications app1 = Applications.builder().workUrl("url1").appliedDate("invalid-date").build();
+        Applications app2 = Applications.builder().workUrl("url2").appliedDate("13-08-2024").build();
+        List<Applications> appList = List.of(app1, app2);
+        var savedApplications = applicationsRepository.saveAll(appList);
+
+        savedWorkGroup.setApplications(savedApplications);
+        var updatedGroup = groupRepository.save(savedWorkGroup);
+
+        //when + then
+        mockMvc.perform(get("/applications/all/" + updatedGroup.getId()))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.detail").value("Cannot sort applications list because of time parsing"));
     }
 
     @Test
