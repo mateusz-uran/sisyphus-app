@@ -1,5 +1,6 @@
 package io.github.mateuszuran.sisyphus_app.unit.service;
 
+import io.github.mateuszuran.sisyphus_app.exception.ServiceException;
 import io.github.mateuszuran.sisyphus_app.model.ApplicationStatus;
 import io.github.mateuszuran.sisyphus_app.model.Applications;
 import io.github.mateuszuran.sisyphus_app.model.WorkGroup;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -180,6 +182,26 @@ public class WorkGroupServiceTest {
                 .hasSize(applicationsList.size())
                 .extracting(Applications::getWorkUrl)
                 .containsExactly("work1", "work2", "work3");
+    }
+
+    @Test
+    public void givenWorkGroupId_whenGetAllApplicationsAndDateIncorrect_thenThrowException() throws ParseException {
+        String workGroupId = "123";
+        WorkGroup group = WorkGroup.builder().id(workGroupId).applications(new ArrayList<>()).build();
+
+        Applications application1 = Applications.builder().workUrl("work1").appliedDate("invalid-date").build();
+        Applications application2 = Applications.builder().workUrl("work2").appliedDate("13-08-2024").build();
+        var applicationsList = List.of(application1, application2);
+        group.getApplications().addAll(applicationsList);
+        when(repository.findById(workGroupId)).thenReturn(Optional.of(group));
+
+        when(util.convertCreationTime("invalid-date")).thenThrow(new ParseException("Invalid date format", 0));
+
+        // when + then
+        ServiceException thrownException = assertThrows(ServiceException.class,
+                () -> serviceImpl.getAllApplicationsFromWorkGroup(workGroupId));
+
+        assertEquals("Cannot sort applications list because of time parsing", thrownException.getMessage());
     }
 
     @Test

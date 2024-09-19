@@ -1,6 +1,7 @@
 package io.github.mateuszuran.sisyphus_app.service;
 
 import io.github.mateuszuran.sisyphus_app.dto.WorkGroupDTO;
+import io.github.mateuszuran.sisyphus_app.exception.ServiceException;
 import io.github.mateuszuran.sisyphus_app.model.Applications;
 import io.github.mateuszuran.sisyphus_app.model.WorkGroup;
 import io.github.mateuszuran.sisyphus_app.repository.GroupRepository;
@@ -9,13 +10,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.Base64;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -83,7 +86,16 @@ public class WorkGroupServiceImpl implements WorkGroupService {
     @Override
     public List<Applications> getAllApplicationsFromWorkGroup(String workGroupId) {
         var applications = getWorkGroup(workGroupId).getApplications();
-        applications.sort(Comparator.comparing(Applications::getAppliedDate));
+
+        applications.sort(Comparator.comparing((Applications app) -> {
+            try {
+                return utility.convertCreationTime(app.getAppliedDate());
+            } catch (ParseException e) {
+                log.info("Parse exception: " + e.getMessage());
+                throw new ServiceException("Cannot sort applications list because of time parsing", HttpStatus.BAD_REQUEST);
+            }
+        }, Comparator.nullsLast(Timestamp::compareTo)).reversed());
+
         return applications;
     }
 
