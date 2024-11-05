@@ -51,7 +51,7 @@ public class ApplicationsServiceImpl implements ApplicationsService {
     @Override
     public void deleteApplication(String applicationId) {
         var applicationToDelete = getSingleApplication(applicationId);
-        groupServiceImpl.updateGroupWhenApplicationDelete(applicationToDelete);
+        groupServiceImpl.updateGroupCounters(applicationToDelete);
 
         if (applicationToDelete.getSpecification().getId() != null) {
             event.publishEvent(new ApplicationDeleteEvent(applicationToDelete.getSpecification().getId()));
@@ -63,18 +63,15 @@ public class ApplicationsServiceImpl implements ApplicationsService {
     @Override
     public Applications updateApplicationStatus(String applicationId, String newStatus) {
         var workToUpdate = getSingleApplication(applicationId);
-        String oldStatus = workToUpdate.getStatus().name();
 
         if (workToUpdate.getStatus().equals(ApplicationStatus.getByUpperCaseStatus(newStatus))) {
             throw new ServiceException("New status is the same as old status, cannot update", HttpStatus.FORBIDDEN);
         }
 
+        groupServiceImpl.updateGroupCounters(workToUpdate, newStatus);
+
         workToUpdate.setStatus(ApplicationStatus.getByUpperCaseStatus(newStatus));
-        var savedWork = repository.save(workToUpdate);
-
-        groupServiceImpl.updateGroupWhenApplicationUpdate(savedWork, workToUpdate.getStatus().name(), oldStatus);
-
-        return savedWork;
+        return repository.save(workToUpdate);
     }
 
     @Override

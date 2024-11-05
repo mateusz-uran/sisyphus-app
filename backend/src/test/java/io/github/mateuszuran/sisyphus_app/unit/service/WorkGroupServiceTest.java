@@ -215,7 +215,7 @@ public class WorkGroupServiceTest {
         ArgumentCaptor<WorkGroup> groupCaptor = ArgumentCaptor.forClass(WorkGroup.class);
 
         // when
-        serviceImpl.updateGroupWhenApplicationUpdate(application, ApplicationStatus.IN_PROGRESS.name(), application.getStatus().name());
+        serviceImpl.updateGroupCounters(application, ApplicationStatus.HIRED.name());
 
         // then
         verify(repository).findAll();
@@ -238,7 +238,7 @@ public class WorkGroupServiceTest {
         ArgumentCaptor<WorkGroup> groupCaptor = ArgumentCaptor.forClass(WorkGroup.class);
 
         // when
-        serviceImpl.updateGroupWhenApplicationUpdate(application, ApplicationStatus.REJECTED.name(), application.getStatus().name());
+        serviceImpl.updateGroupCounters(application, ApplicationStatus.REJECTED.name());
 
         // then
         verify(repository).findAll();
@@ -256,7 +256,7 @@ public class WorkGroupServiceTest {
         Applications application = Applications.builder().status(ApplicationStatus.SENT).build();
 
         //when + then
-        assertThrows(IllegalArgumentException.class, () -> serviceImpl.updateGroupWhenApplicationUpdate(application, ApplicationStatus.REJECTED.name(), application.getStatus().name()));
+        assertThrows(IllegalArgumentException.class, () -> serviceImpl.updateGroupCounters(application, ApplicationStatus.REJECTED.name()));
         verify(repository, never()).save(any());
     }
 
@@ -270,7 +270,7 @@ public class WorkGroupServiceTest {
 
         ArgumentCaptor<WorkGroup> groupCaptor = ArgumentCaptor.forClass(WorkGroup.class);
         //when
-        serviceImpl.updateGroupWhenApplicationDelete(application);
+        serviceImpl.updateGroupCounters(application);
 
         //then
         verify(repository).findAll();
@@ -292,7 +292,7 @@ public class WorkGroupServiceTest {
 
         ArgumentCaptor<WorkGroup> groupCaptor = ArgumentCaptor.forClass(WorkGroup.class);
         //when
-        serviceImpl.updateGroupWhenApplicationDelete(application);
+        serviceImpl.updateGroupCounters(application);
 
         //then
         verify(repository).findAll();
@@ -306,14 +306,14 @@ public class WorkGroupServiceTest {
     @Test
     void givenApplication_whenStatusIsHired_thenToggleWorkGroup() {
         //given
-        Applications application = Applications.builder().id("1234").status(ApplicationStatus.HIRED).build();
+        Applications application = Applications.builder().id("1234").status(ApplicationStatus.IN_PROGRESS).build();
         WorkGroup group = WorkGroup.builder().sent(5).inProgress(3).rejected(2).applications(List.of(application)).build();
 
         when(repository.findAll()).thenReturn(List.of(group));
 
         ArgumentCaptor<WorkGroup> groupCaptor = ArgumentCaptor.forClass(WorkGroup.class);
         //when
-        serviceImpl.updateGroupWhenApplicationUpdate(application, "hired", "in_progress");
+        serviceImpl.updateGroupCounters(application, ApplicationStatus.HIRED.name());
 
         //then
         verify(repository).findAll();

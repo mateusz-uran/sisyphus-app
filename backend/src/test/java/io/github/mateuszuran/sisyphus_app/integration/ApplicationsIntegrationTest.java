@@ -245,7 +245,6 @@ public class ApplicationsIntegrationTest extends AbstractIntegrationTest {
         WorkGroup group = WorkGroup.builder()
                 .cvData(null)
                 .creationTime("today")
-                .sent(15)
                 .rejected(4)
                 .inProgress(12)
                 .isHired(true)
@@ -263,7 +262,6 @@ public class ApplicationsIntegrationTest extends AbstractIntegrationTest {
         var updatedGroup = groupRepository.findById(savedGroup.getId()).orElseThrow();
         Assertions.assertNotNull(updatedGroup);
         Assertions.assertEquals(updatedGroup.getRejected(), 4);
-        Assertions.assertEquals(updatedGroup.getSent(), 15);
         Assertions.assertFalse(updatedGroup.isHired());
     }
 }
