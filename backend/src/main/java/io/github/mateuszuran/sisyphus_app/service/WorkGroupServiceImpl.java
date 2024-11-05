@@ -99,46 +99,19 @@ public class WorkGroupServiceImpl implements WorkGroupService {
         return applications;
     }
 
-
     @Override
-    public void updateGroupWhenApplicationUpdate(Applications work, String newStatus, String oldStatus) {
-        var group = findGroupByGivenApplication(work);
-
-        adjustOldStatusCount(oldStatus, group, false);
-        adjustNewStatusCount(newStatus, group);
-
+    public void updateGroupCounters(Applications work, String newStatus) {
+        WorkGroup group = findGroupByGivenApplication(work);
+        group.incrementCounter(newStatus);
+        group.decrementCounter(work.getStatus().name());
         repository.save(group);
     }
 
     @Override
-    public void updateGroupWhenApplicationDelete(Applications work) {
-        var group = findGroupByGivenApplication(work);
-
-        adjustOldStatusCount(work.getStatus().name(), group, true);
-        group.getApplications().remove(work);
+    public void updateGroupCounters(Applications work) {
+        WorkGroup group = findGroupByGivenApplication(work);
+        group.decrementCounter(work.getStatus().name());
         repository.save(group);
-    }
-
-    private void adjustOldStatusCount(String oldStatus, WorkGroup group, boolean isDeleting) {
-        switch (oldStatus.toUpperCase()) {
-            case "SENT" -> {
-                if (isDeleting) group.setSent(Math.max(0, group.getSent() - 1));
-            }
-            case "IN_PROGRESS" -> group.setInProgress(Math.max(0, group.getInProgress() - 1));
-            case "REJECTED" -> group.setRejected(Math.max(0, group.getRejected() - 1));
-            case "HIRED" -> group.setHired(false);
-            default -> throw new IllegalStateException("Unexpected value: " + oldStatus.toUpperCase());
-        }
-    }
-
-    private void adjustNewStatusCount(String newStatus, WorkGroup group) {
-        switch (newStatus.toUpperCase()) {
-            case "SENT" -> group.setSent(group.getSent() + 1);
-            case "IN_PROGRESS" -> group.setInProgress(group.getInProgress() + 1);
-            case "REJECTED" -> group.setRejected(group.getRejected() + 1);
-            case "HIRED" -> group.setHired(true);
-            default -> throw new IllegalStateException("Unexpected value: " + newStatus.toUpperCase());
-        }
     }
 
     private WorkGroup findGroupByGivenApplication(Applications work) {
