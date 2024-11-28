@@ -6,6 +6,7 @@ import io.github.mateuszuran.sisyphus_app.model.Applications;
 import io.github.mateuszuran.sisyphus_app.model.WorkGroup;
 import io.github.mateuszuran.sisyphus_app.repository.GroupRepository;
 import io.github.mateuszuran.sisyphus_app.util.TimeUtil;
+import io.github.mateuszuran.sisyphus_app.util.WorkGroupComparator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.BsonBinarySubType;
@@ -16,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Comparator;
 import java.util.List;
@@ -145,6 +148,7 @@ public class WorkGroupServiceImpl implements WorkGroupService {
 
     public List<WorkGroupDTO> getAllMappedWorkGroups() {
         var allGroups = getAllGroups();
+        allGroups.sort(new WorkGroupComparator(utility));
         return allGroups
                 .stream()
                 .map(group ->
@@ -158,7 +162,6 @@ public class WorkGroupServiceImpl implements WorkGroupService {
                                 .inProgress(group.getInProgress())
                                 .isHired(group.isHired())
                                 .build())
-                .sorted(Comparator.comparing(WorkGroupDTO::creationTime))
                 .toList();
     }
 }

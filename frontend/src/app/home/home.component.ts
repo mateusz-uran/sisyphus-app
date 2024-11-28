@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UploadFileComponent } from '../upload-file/upload-file.component';
 import { WorkGroupComponent } from '../work-group/work-group.component';
 import { TransformedWorkGroup } from '../interfaces/work-group';
 import { WorkGroupService } from '../services/work-group.service';
@@ -8,7 +7,7 @@ import { WorkGroupService } from '../services/work-group.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, UploadFileComponent, WorkGroupComponent],
+  imports: [CommonModule, WorkGroupComponent],
   template: `
     <ng-container *ngFor="let workGroup of transformedGroupList">
       <app-work-group [workGroup]="workGroup"></app-work-group>
