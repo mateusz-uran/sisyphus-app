@@ -1,5 +1,6 @@
 package io.github.mateuszuran.sisyphus_app.unit.service;
 
+import io.github.mateuszuran.sisyphus_app.dto.WorkGroupDTO;
 import io.github.mateuszuran.sisyphus_app.exception.ServiceException;
 import io.github.mateuszuran.sisyphus_app.model.ApplicationStatus;
 import io.github.mateuszuran.sisyphus_app.model.Applications;
@@ -7,6 +8,7 @@ import io.github.mateuszuran.sisyphus_app.model.WorkGroup;
 import io.github.mateuszuran.sisyphus_app.repository.GroupRepository;
 import io.github.mateuszuran.sisyphus_app.service.WorkGroupServiceImpl;
 import io.github.mateuszuran.sisyphus_app.util.TimeUtil;
+import org.bson.types.Binary;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -15,7 +17,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -144,6 +148,29 @@ public class WorkGroupServiceTest {
                 .hasSize(groupList.size())
                 .extracting(WorkGroup::getCreationTime)
                 .containsExactly("date1", "date2", "date3");
+
+    }
+
+    @Test
+    public void givenNothing_whenGet_thenReturnSortedListOfWorKGroups() throws ParseException {
+        //given
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        WorkGroup group1 = WorkGroup.builder().creationTime("14-08-2024").cvData(new Binary(new byte[5])).build();
+        WorkGroup group2 = WorkGroup.builder().creationTime("21-10-2024").cvData(new Binary(new byte[5])).build();
+        WorkGroup group3 = WorkGroup.builder().creationTime("06-03-2024").cvData(new Binary(new byte[5])).build();
+        var groupList = new ArrayList<>(List.of(group1, group2, group3));
+        when(repository.findAll()).thenReturn(groupList);
+        when(util.convertCreationTime(group1.getCreationTime())).thenReturn(new Timestamp(dateFormat.parse(group1.getCreationTime()).getTime()));
+        when(util.convertCreationTime(group2.getCreationTime())).thenReturn(new Timestamp(dateFormat.parse(group2.getCreationTime()).getTime()));
+        when(util.convertCreationTime(group3.getCreationTime())).thenReturn(new Timestamp(dateFormat.parse(group3.getCreationTime()).getTime()));
+        //when
+        var returnedList = serviceImpl.getAllMappedWorkGroups();
+        //then
+        assertThat(returnedList)
+                .hasSize(groupList.size())
+                .extracting(WorkGroupDTO::creationTime)
+                .containsExactly("21-10-2024", "14-08-2024", "06-03-2024");
 
     }
 

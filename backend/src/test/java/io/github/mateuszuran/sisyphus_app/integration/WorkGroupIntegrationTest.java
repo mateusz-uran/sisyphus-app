@@ -76,6 +76,19 @@ public class WorkGroupIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    void givenNothing_whenGetAlLGroups_thenReturnSortedByCreationTime() throws Exception {
+        var pdf = new Binary(fakePdf());
+
+        repository.save(WorkGroup.builder().cvData(pdf).creationTime("12-08-2024").build());
+        repository.save(WorkGroup.builder().cvData(pdf).creationTime("15-08-2024").build());
+
+        mockMvc.perform(get("/group/all"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].creationTime").value("15-08-2024"));
+
+    }
+
+    @Test
     void givenWorKGroup_whenGet_thenReturnSingleObject() throws Exception {
         var pdf = new Binary(fakePdf());
 
